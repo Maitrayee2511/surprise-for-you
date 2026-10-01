@@ -1102,9 +1102,28 @@
                 <div class="mascot-box" style="width: 100%; height: 100px; border:none; box-shadow:none;">
                     <span style="font-size: 50px;">⚽❤️️</span>
                 </div>
-                <h3 style="color: var(--pink-main); margin-bottom: 10px;">To my favorite footballer...</h3>
-                <p style="font-size: 14px; line-height: 1.6; color: #555;">
-                    Happy Boyfriend Day, my love! Thank you for working so hard both on and off the field. I'm always cheering for you, no matter what. Here's to scoring many more goals and making countless memories together!
+                <h3 style="color: var(--pink-main); margin-bottom: 10px;">To my favourite person, my Pillu, my cutiee patoootieee, ❤️</h3>
+                <p style="font-size: 14px; line-height: 1.7; color: #555; text-align:left;">
+                    I don't know how to put everything I feel for you into one little letter, but I'll try.<br><br>
+                    There is going to be a time when we won't be able to see each other whenever we want. There will be days when I will miss you a little more than usual, days when all I'll want is to have you beside me, and days when I wish I could just run to you instead of being miles away.<br><br>
+                    But even when we're away, I never want you to forget that you're still my person.<br><br>
+                    Distance can change the number of kilometres between us, but it can never change what you mean to me. We'll still have our calls, our random texts, our silly conversations, our little jokes that nobody else understands, and all those tiny moments that somehow make the distance feel a little smaller.<br><br>
+                    And yes, we'll argue. We'll annoy each other. Sometimes we'll misunderstand each other, get angry, or say things we don't really mean. But I don't want any argument to ever make us forget how much we love each other. No fight, no distance, no bad day and no difficult phase could ever be bigger than what we have.<br><br>
+                    I want us to keep choosing each other, even on the days when it's hard.<br><br>
+                    I want to watch you chase your dreams, play your game, grow, succeed and become everything you want to be. And no matter how far away I am, I will always be somewhere cheering for you, probably being your most annoying but proudest fan. ⚽❤️<br><br>
+                    I want more Ganpati days together, more trips, more birthdays, more random plans, more silly pictures, more late-night talks, more memories and someday, hopefully, that picture of us standing together as married ones. 🥹❤️<br><br>
+                    Until then, we'll conquer this LDR together.<br><br>
+                    We'll have our good days, our bad days, our arguments, our laughter and everything in between. But through all of it, I just want us to remember one thing:<br><br>
+                    <strong>It's always going to be us.</strong><br><br>
+                    No matter how far.<br>
+                    No matter how difficult.<br>
+                    No matter how many times we argue.<br><br>
+                    Nothing could ever break what we have if we keep holding on to each other.<br><br>
+                    So when you miss me, remember that somewhere, I'm missing you too.<br><br>
+                    And when you look at the distance between us, remember that my heart has never been far from you.<br><br>
+                    I love you, my Pillu. More than I probably say, more than I know how to explain, and more than any little website could ever fit into words.<br><br>
+                    Always your girl. ❤️<br><br>
+                    — Maitrayee
                 </p>
             </div>
             <button class="btn-primary" onclick="sendKiss()" style="margin-top:20px;">Send Me Kisses &#128033;</button>
@@ -1122,21 +1141,25 @@
             {
                 title: 'Bade Achhe Lagte Hain ✨',
                 file: 'Bade Achhe Lagte Hain Balika Badhu 128 Kbps.mp3',
+                startAt: 18,
                 caption: 'This is for the time when you will be away from me. ❤️\n\n“तुम इन सबको छोड़के कैसे कल सुबह जाओगी, मेरे साथ इन्हें भी तो तुम याद बहुत आओगी... बड़े अच्छे लगते हैं — ये धरती, ये नदिया, ये रैना.”'
             },
             {
                 title: 'Kaakan 🌙',
                 file: 'Kaakan-Official-Video-｜-Kaakan-｜-Jitendra-Joshi-Urmila-Kothare-｜-Shankar-Mahadevan-9HNx1NIwdAc-140-audio-only-1733640322id.mp3',
+                startAt: 16,
                 caption: 'For that quiet, deep feeling of love — when someone feels like home, and you carry that person with you even when you are apart. 🌙❤️'
             },
             {
                 title: 'Tere Paas Main 🤍',
                 file: '_Tere Paas Main (Male Version)(KoshalWorld.Com).mp3',
+                startAt: 8,
                 caption: 'This song is for you when you are away from me — a little reminder that even with distance between us, my heart still wants to be close to you. 🤍'
             },
             {
                 title: 'Enna Sona ❤️',
                 file: 'Enna Sona Ok Jaanu 128 Kbps.mp3',
+                startAt: 17,
                 caption: 'This is our song. ❤️\n\n“Mera dil baitha jaa raha hai, Jenny, kyun? America jaane se darr lag raha hai? Nahi! Use chhodne se darr lag raha hai!!”'
             }
         ];
@@ -1155,6 +1178,9 @@
             backgroundAudio.loop = false;
             backgroundAudio.src = encodeFilePath(song.file);
             backgroundAudio.load();
+            backgroundAudio.addEventListener('loadedmetadata', () => {
+                if (Number.isFinite(song.startAt)) backgroundAudio.currentTime = song.startAt;
+            }, { once: true });
             document.getElementById('song-title').textContent = song.title;
             document.getElementById('song-caption').textContent = song.caption;
             document.querySelectorAll('.song-choice').forEach((btn, i) => {
@@ -1291,6 +1317,9 @@
             quizScore = 0;
             document.getElementById('quiz-next').style.display = 'none';
             document.getElementById('quiz-feedback').textContent = '';
+            document.getElementById('quiz-options').innerHTML = '';
+            document.getElementById('quiz-question').textContent = 'Loading...';
+            document.getElementById('quiz-progress').textContent = 'Question 1 / 10';
         }
 
         function resetPromises() {
