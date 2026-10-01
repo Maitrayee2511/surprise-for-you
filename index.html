@@ -523,8 +523,8 @@
         /* Slide 9: Photo Gallery Grid */
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
             width: 100%;
             margin-bottom: 20px;
         }
@@ -543,21 +543,29 @@
 
         .polaroid-img {
             width: 100%;
-            height: 110px;
-            background: #eee;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #aaa;
-            font-size: 28px;
+            height: 190px;
+            background: #f6f6f6;
+            border-radius: 9px;
+            display: block;
+            object-fit: contain;
+        }
+
+        .polaroid-img[src] {
+            image-rendering: auto;
         }
 
         .polaroid-caption {
-            font-size: 11px;
+            font-size: 12px;
+            line-height: 1.35;
             font-weight: 700;
             color: #777;
-            margin-top: 8px;
+            margin-top: 9px;
+            min-height: 34px;
+        }
+
+        @media (max-width: 430px) {
+            .photo-grid { grid-template-columns: 1fr; gap: 18px; }
+            .polaroid-img { height: 280px; }
         }
 
         /* Slide 10: Love Coupon / Reward */
@@ -646,7 +654,7 @@
 <body class="bg-pattern-yellow" id="body-bg">
 
     <!-- Persistent playlist: keep these MP3 files in the same GitHub folder as index.html. -->
-    <audio id="background-audio" loop preload="auto"></audio>
+    <audio id="background-audio" preload="auto" playsinline></audio>
 
     <!-- Header Navigation -->
     <div class="header-nav">
@@ -667,7 +675,7 @@
             </div>
             <h1>Happy Boyfriend Day, My MVP!</h1>
             <p>I made a little something just for my star player..</p>
-            <button class="btn-primary" onclick="nextSlide()">Kick Off My Heart &#10084;</button>
+            <button class="btn-primary" onclick="startOpeningSong(); nextSlide()">Kick Off My Heart &#10084;</button>
         </div>
 
         <!-- SLIDE 2: This or That -->
@@ -908,9 +916,9 @@
                 <div class="album-art" id="album-art">
                     <span style="font-size: 50px;">&#127925;</span>
                 </div>
-                <h3 id="song-title">Tum Tak ❤️</h3>
-                <p id="song-caption" style="font-size: 13px; font-style: italic; margin-bottom: 10px;">
-                    "For us — through every mile, every game, every little moment... Tum Tak."
+                <h3 id="song-title">Bade Achhe Lagte Hain ✨</h3>
+                <p id="song-caption" style="font-size: 13px; font-style: italic; line-height: 1.6; margin-bottom: 10px; white-space: pre-line;">
+                    This is for the time when you will be away from me. Some songs say what the heart cannot easily say. ❤️
                 </p>
                 <button class="play-btn" onclick="toggleAudio()" id="song-play-btn">&#9654;</button>
                 <div id="song-list" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:16px;"></div>
@@ -923,20 +931,24 @@
             <h2>HIGHLIGHT REEL</h2>
             <div class="photo-grid">
                 <div class="polaroid">
-                    <div class="polaroid-img">⚽</div>
-                    <div class="polaroid-caption">My favorite athlete &#128155;</div>
+                    <div class="polaroid-img"><img src="fun.jpg" alt="Our fun memory"></div>
+                    <div class="polaroid-caption">The fun, silly moments with you are some of my favourites. 💛</div>
                 </div>
                 <div class="polaroid">
-                    <div class="polaroid-img">&#128105;&#8205;&#10084;&#65039;&#8205;&#128184;</div>
-                    <div class="polaroid-caption">My favorite picture of us</div>
+                    <div class="polaroid-img"><img src="cute.jpg" alt="Our cute memory"></div>
+                    <div class="polaroid-caption">Our cutest little moments — the ones I could look at forever. 🥹❤️</div>
                 </div>
                 <div class="polaroid">
-                    <div class="polaroid-img">&#127942;</div>
-                    <div class="polaroid-caption">Winning at life with you</div>
+                    <div class="polaroid-img"><img src="bappa.jpg" alt="Our Ganesh Chaturthi memory"></div>
+                    <div class="polaroid-caption">Best Ganesh Chaturthi after so long. I hope one day we reach here as married ones! 🥹🙏❤️</div>
                 </div>
                 <div class="polaroid">
-                    <div class="polaroid-img">&#10024;</div>
-                    <div class="polaroid-caption">Still can't believe you're mine</div>
+                    <div class="polaroid-img"><img src="bday.jpg" alt="Our birthday memory"></div>
+                    <div class="polaroid-caption">Best time spent with you — the kind of memories I want more of. 🎂❤️</div>
+                </div>
+                <div class="polaroid">
+                    <div class="polaroid-img"><img src="trip.jpg" alt="Our trip memory"></div>
+                    <div class="polaroid-caption">To many more trips together — the bestest time, the unexpected moments, and everything in between. ✈️🥹❤️</div>
                 </div>
             </div>
             <button class="btn-primary" onclick="nextSlide()">Next &#8594;</button>
@@ -998,34 +1010,40 @@
         const backgroundAudio = document.getElementById('background-audio');
         const playlist = [
             {
-                title: 'Tum Tak ❤️',
-                file: 'Tum Tak Raanjhanaa 128 Kbps.mp3',
-                caption: 'For us — through every mile, every game, every little moment... Tum Tak.'
-            },
-            {
-                title: 'Kakan 🌙',
-                file: 'Kakan.mp3',
-                caption: 'For the quiet, close-to-the-heart moments that feel like us.'
-            },
-            {
-                title: 'Enna Sona 🤍',
-                file: 'Enna Sona.mp3',
-                caption: 'For the LDR days — missing you, choosing you, and waiting for us.'
-            },
-            {
                 title: 'Bade Achhe Lagte Hain ✨',
-                file: 'Bade Achhe Lagte Hain.mp3',
-                caption: 'For that simple feeling of being happy just because it is you.'
+                file: 'Bade Achhe Lagte Hain Balika Badhu 128 Kbps.mp3',
+                caption: 'This is for the time when you will be away from me. ❤️\n\n“तुम इन सबको छोड़के कैसे कल सुबह जाओगी, मेरे साथ इन्हें भी तो तुम याद बहुत आओगी... बड़े अच्छे लगते हैं — ये धरती, ये नदिया, ये रैना.”'
+            },
+            {
+                title: 'Kaakan 🌙',
+                file: 'Kaakan-Official-Video-｜-Kaakan-｜-Jitendra-Joshi-Urmila-Kothare-｜-Shankar-Mahadevan-9HNx1NIwdAc-140-audio-only-1733640322id.mp3',
+                caption: 'For that quiet, deep feeling of love — when someone feels like home, and you carry that person with you even when you are apart. 🌙❤️'
+            },
+            {
+                title: 'Tere Paas Main 🤍',
+                file: '_Tere Paas Main (Male Version)(KoshalWorld.Com).mp3',
+                caption: 'This song is for you when you are away from me — a little reminder that even with distance between us, my heart still wants to be close to you. 🤍'
+            },
+            {
+                title: 'Enna Sona ❤️',
+                file: 'Enna Sona Ok Jaanu 128 Kbps.mp3',
+                caption: 'This is our song. ❤️\n\n“Mera dil baitha jaa raha hai, Jenny, kyun? America jaane se darr lag raha hai? Nahi! Use chhodne se darr lag raha hai!!”'
             }
         ];
         let currentSong = 0;
         let isPlaying = false;
+        let openingSongFinished = false;
+        const openingSongFile = 'Tum Tak Raanjhanaa 128 Kbps.mp3';
+
+        function encodeFilePath(file) {
+            return './' + file.split('/').map(part => encodeURIComponent(part)).join('/');
+        }
 
         function setSong(index, autoplay = false) {
             currentSong = index;
             const song = playlist[index];
-            // Files must be in the same GitHub folder as index.html.
-            backgroundAudio.src = './' + song.file.split('/').map(encodeURIComponent).join('/');
+            backgroundAudio.loop = false;
+            backgroundAudio.src = encodeFilePath(song.file);
             backgroundAudio.load();
             document.getElementById('song-title').textContent = song.title;
             document.getElementById('song-caption').textContent = song.caption;
@@ -1033,7 +1051,7 @@
                 btn.style.fontWeight = i === index ? '700' : '500';
                 btn.style.transform = i === index ? 'scale(1.04)' : 'scale(1)';
             });
-            if (autoplay) startMusic();
+            if (autoplay) playCurrentSong();
         }
 
         function renderPlaylist() {
@@ -1045,14 +1063,11 @@
         }
 
         function selectSong(index) {
-            const wasPlaying = isPlaying;
-            setSong(index, wasPlaying);
+            setSong(index, true);
         }
 
-        async function startMusic() {
+        async function playCurrentSong() {
             try {
-                if (!backgroundAudio.src) setSong(currentSong, false);
-                backgroundAudio.muted = false;
                 await backgroundAudio.play();
                 isPlaying = true;
                 document.getElementById('music-icon').innerHTML = '&#10084; MUSIC ON';
@@ -1060,8 +1075,17 @@
                 document.getElementById('album-art')?.classList.add('playing');
             } catch (err) {
                 isPlaying = false;
-                console.warn('Music could not start. Make sure the MP3 files are uploaded beside index.html.', err);
+                console.warn('Music could not start. Check that the MP3 filename exactly matches the GitHub file.', err);
             }
+        }
+
+        function startOpeningSong() {
+            if (openingSongFinished) return;
+            openingSongFinished = true;
+            backgroundAudio.loop = false;
+            backgroundAudio.src = encodeFilePath(openingSongFile);
+            backgroundAudio.load();
+            playCurrentSong();
         }
 
         function stopMusic() {
@@ -1074,23 +1098,22 @@
 
         function toggleAudio() {
             if (isPlaying) stopMusic();
-            else startMusic();
+            else playCurrentSong();
         }
-
-        // Start music from a real user gesture. This avoids browser autoplay blocking.
-        let musicGestureHandled = false;
-        function handleFirstMusicGesture() {
-            if (musicGestureHandled) return;
-            musicGestureHandled = true;
-            if (!isPlaying) startMusic();
-        }
-        document.addEventListener('pointerdown', handleFirstMusicGesture, { once: true });
-        document.addEventListener('keydown', handleFirstMusicGesture, { once: true });
 
         backgroundAudio.addEventListener('ended', () => {
-            // Because the audio element loops, this normally never fires.
-            // Kept as a safe fallback if loop is changed later.
-            setSong((currentSong + 1) % playlist.length, true);
+            if (backgroundAudio.src.includes(encodeURIComponent(openingSongFile))) {
+                return;
+            }
+            const next = (currentSong + 1) % playlist.length;
+            setSong(next, true);
+        });
+
+        backgroundAudio.addEventListener('error', () => {
+            isPlaying = false;
+            document.getElementById('music-icon').innerHTML = '&#9835; MUSIC OFF';
+            document.getElementById('song-play-btn').innerHTML = '&#9654;';
+            console.warn('Audio file could not be loaded:', backgroundAudio.src);
         });
 
         renderPlaylist();
@@ -1162,7 +1185,10 @@
             if (currentSlide === 5) resetTicTacToe();
             if (currentSlide === 6) resetPromises();
             if (currentSlide === 7) resetReasons();
-            if (currentSlide === 8 && !isPlaying) startMusic();
+            if (currentSlide === 8) {
+                stopMusic();
+                setSong(currentSong, false);
+            }
             if (currentSlide === 11) resetHoldHeart();
         }
 
