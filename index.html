@@ -71,8 +71,89 @@
             right: 0;
             display: flex;
             justify-content: space-between;
+            align-items: flex-start;
             padding: 0 20px;
-            z-index: 100;
+            z-index: 200;
+            gap: 8px;
+        }
+
+        .header-left, .header-right {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .soundtrack-wrap {
+            position: relative;
+        }
+
+        .soundtrack-panel {
+            position: absolute;
+            top: 48px;
+            left: 0;
+            width: min(330px, calc(100vw - 40px));
+            background: rgba(255,255,255,0.98);
+            border: 2px solid #ffd1dc;
+            border-radius: 20px;
+            padding: 14px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+            display: none;
+            text-align: left;
+        }
+
+        .soundtrack-panel.open {
+            display: block;
+            animation: fadeIn 0.2s ease forwards;
+        }
+
+        .soundtrack-panel-title {
+            font-family: 'Fredoka', sans-serif;
+            color: var(--pink-main);
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .soundtrack-panel-subtitle {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .soundtrack-option {
+            width: 100%;
+            border: 1px solid #f0d9e0;
+            background: #fff;
+            border-radius: 13px;
+            padding: 10px 12px;
+            margin-top: 7px;
+            text-align: left;
+            font-family: 'Nunito', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .soundtrack-option:hover, .soundtrack-option.active {
+            background: var(--pink-light);
+            border-color: var(--pink-main);
+            color: var(--pink-main);
+        }
+
+        .soundtrack-now-playing {
+            margin-top: 10px;
+            padding: 9px 11px;
+            background: #fff7f9;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #777;
+        }
+
+        @media (max-width: 520px) {
+            .header-nav { padding: 0 12px; }
+            .nav-btn { padding: 8px 11px; font-size: 12px; }
+            .soundtrack-panel { left: -2px; }
         }
 
         .nav-btn {
@@ -520,52 +601,66 @@
             box-shadow: 0 4px 12px rgba(255, 107, 139, 0.4);
         }
 
-        /* Slide 9: Photo Gallery Grid */
+        /* Slide 9: Photo Gallery */
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 16px;
+            grid-template-columns: 1fr;
+            gap: 22px;
             width: 100%;
             margin-bottom: 20px;
         }
 
         .polaroid {
             background: white;
-            padding: 10px 10px 15px 10px;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
-            transform: rotate(-2deg);
+            padding: 12px 12px 16px;
+            border-radius: 18px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            transform: none;
+            width: 100%;
         }
 
         .polaroid:nth-child(even) {
-            transform: rotate(2deg);
+            transform: none;
         }
 
         .polaroid-img {
             width: 100%;
-            height: 190px;
-            background: #f6f6f6;
-            border-radius: 9px;
-            display: block;
-            object-fit: contain;
+            height: 300px;
+            background: #f8f8f8;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        .polaroid-img[src] {
-            image-rendering: auto;
+        .polaroid-img img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 13px;
         }
 
         .polaroid-caption {
-            font-size: 12px;
-            line-height: 1.35;
-            font-weight: 700;
-            color: #777;
-            margin-top: 9px;
-            min-height: 34px;
+            font-size: 13px;
+            line-height: 1.45;
+            font-weight: 800;
+            color: #666;
+            margin-top: 12px;
+            min-height: 0;
+            padding: 0 4px;
+            text-align: center;
         }
 
-        @media (max-width: 430px) {
-            .photo-grid { grid-template-columns: 1fr; gap: 18px; }
-            .polaroid-img { height: 280px; }
+        @media (min-width: 650px) {
+            .photo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .polaroid-img { height: 260px; }
+        }
+
+        @media (max-width: 380px) {
+            .polaroid-img { height: 250px; }
         }
 
         /* Slide 10: Love Coupon / Reward */
@@ -658,12 +753,27 @@
 
     <!-- Header Navigation -->
     <div class="header-nav">
-        <button class="nav-btn" id="back-btn" onclick="prevSlide()" style="visibility: hidden;">
-            &#8592; BACK
-        </button>
-        <button class="nav-btn" onclick="toggleAudio()">
-            <span id="music-icon">&#9835;</span> MUSIC ON
-        </button>
+        <div class="header-left">
+            <button class="nav-btn" id="back-btn" onclick="prevSlide()" style="visibility: hidden;">
+                &#8592; BACK
+            </button>
+            <div class="soundtrack-wrap">
+                <button class="nav-btn" onclick="toggleSoundtrackPanel()" id="soundtrack-btn">
+                    &#127925; OUR SOUNDTRACK
+                </button>
+                <div class="soundtrack-panel" id="soundtrack-panel">
+                    <div class="soundtrack-panel-title">Our Soundtrack &#127926;</div>
+                    <div class="soundtrack-panel-subtitle">Pick a song — it will keep playing while you explore the whole website.</div>
+                    <div id="header-song-list"></div>
+                    <div class="soundtrack-now-playing" id="header-now-playing">Now playing: —</div>
+                </div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="nav-btn" onclick="toggleAudio()">
+                <span id="music-icon">&#9835; MUSIC OFF</span>
+            </button>
+        </div>
     </div>
 
     <div class="app-container">
@@ -1036,7 +1146,7 @@
         const openingSongFile = 'Tum Tak Raanjhanaa 128 Kbps.mp3';
 
         function encodeFilePath(file) {
-            return './' + file.split('/').map(part => encodeURIComponent(part)).join('/');
+            return './' + file.split('/').map(part => encodeURI(part)).join('/');
         }
 
         function setSong(index, autoplay = false) {
@@ -1051,15 +1161,44 @@
                 btn.style.fontWeight = i === index ? '700' : '500';
                 btn.style.transform = i === index ? 'scale(1.04)' : 'scale(1)';
             });
+            updateSoundtrackUI();
             if (autoplay) playCurrentSong();
         }
 
         function renderPlaylist() {
             const list = document.getElementById('song-list');
-            if (!list) return;
-            list.innerHTML = playlist.map((song, i) =>
-                `<button class="song-choice" onclick="selectSong(${i})" style="border:1px solid rgba(255,105,180,.35); border-radius:999px; padding:8px 12px; background:#fff; cursor:pointer; font-size:12px;">${song.title}</button>`
-            ).join('');
+            if (list) {
+                list.innerHTML = playlist.map((song, i) =>
+                    `<button class="song-choice" onclick="selectSong(${i})" style="border:1px solid rgba(255,105,180,.35); border-radius:999px; padding:8px 12px; background:#fff; cursor:pointer; font-size:12px;">${song.title}</button>`
+                ).join('');
+            }
+
+            const headerList = document.getElementById('header-song-list');
+            if (headerList) {
+                headerList.innerHTML = playlist.map((song, i) =>
+                    `<button class="soundtrack-option" onclick="selectSongFromHeader(${i})">${song.title}</button>`
+                ).join('');
+            }
+            updateSoundtrackUI();
+        }
+
+        function updateSoundtrackUI() {
+            document.querySelectorAll('.soundtrack-option').forEach((btn, i) => {
+                btn.classList.toggle('active', i === currentSong);
+            });
+            const now = document.getElementById('header-now-playing');
+            if (now) {
+                now.textContent = isPlaying ? `Now playing: ${playlist[currentSong].title}` : `Selected: ${playlist[currentSong].title}`;
+            }
+        }
+
+        function toggleSoundtrackPanel() {
+            document.getElementById('soundtrack-panel')?.classList.toggle('open');
+        }
+
+        function selectSongFromHeader(index) {
+            selectSong(index);
+            document.getElementById('soundtrack-panel')?.classList.remove('open');
         }
 
         function selectSong(index) {
@@ -1073,8 +1212,10 @@
                 document.getElementById('music-icon').innerHTML = '&#10084; MUSIC ON';
                 document.getElementById('song-play-btn').innerHTML = '&#10074;&#10074;';
                 document.getElementById('album-art')?.classList.add('playing');
+                updateSoundtrackUI();
             } catch (err) {
                 isPlaying = false;
+                updateSoundtrackUI();
                 console.warn('Music could not start. Check that the MP3 filename exactly matches the GitHub file.', err);
             }
         }
@@ -1085,6 +1226,7 @@
             backgroundAudio.loop = false;
             backgroundAudio.src = encodeFilePath(openingSongFile);
             backgroundAudio.load();
+            document.getElementById('soundtrack-panel')?.classList.remove('open');
             playCurrentSong();
         }
 
@@ -1094,6 +1236,7 @@
             document.getElementById('music-icon').innerHTML = '&#9835; MUSIC OFF';
             document.getElementById('song-play-btn').innerHTML = '&#9654;';
             document.getElementById('album-art')?.classList.remove('playing');
+            updateSoundtrackUI();
         }
 
         function toggleAudio() {
@@ -1102,7 +1245,12 @@
         }
 
         backgroundAudio.addEventListener('ended', () => {
-            if (backgroundAudio.src.includes(encodeURIComponent(openingSongFile))) {
+            if (backgroundAudio.src.includes(encodeURI(openingSongFile))) {
+                isPlaying = false;
+                document.getElementById('music-icon').innerHTML = '&#9835; MUSIC OFF';
+                document.getElementById('song-play-btn').innerHTML = '&#9654;';
+                document.getElementById('album-art')?.classList.remove('playing');
+                updateSoundtrackUI();
                 return;
             }
             const next = (currentSong + 1) % playlist.length;
@@ -1113,6 +1261,7 @@
             isPlaying = false;
             document.getElementById('music-icon').innerHTML = '&#9835; MUSIC OFF';
             document.getElementById('song-play-btn').innerHTML = '&#9654;';
+            updateSoundtrackUI();
             console.warn('Audio file could not be loaded:', backgroundAudio.src);
         });
 
@@ -1185,10 +1334,6 @@
             if (currentSlide === 5) resetTicTacToe();
             if (currentSlide === 6) resetPromises();
             if (currentSlide === 7) resetReasons();
-            if (currentSlide === 8) {
-                stopMusic();
-                setSong(currentSong, false);
-            }
             if (currentSlide === 11) resetHoldHeart();
         }
 
