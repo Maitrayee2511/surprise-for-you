@@ -310,13 +310,14 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            width: 270px;
-            height: 270px;
-            margin: 20px auto;
+            width: min(270px, 82vw);
+            height: min(270px, 82vw);
+            margin: 20px auto 12px;
         }
 
         .game-cell {
             background: white;
+            border: 2px solid #ffe0e8;
             border-radius: 16px;
             display: flex;
             justify-content: center;
@@ -324,11 +325,39 @@
             font-size: 32px;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(0,0,0,0.04);
-            transition: all 0.2s ease;
+            transition: transform 0.2s ease, background 0.2s ease;
         }
 
-        .game-cell:hover {
-            transform: scale(1.02);
+        .game-cell:hover:not(.filled) {
+            transform: scale(1.03);
+            background: #fff8fa;
+        }
+
+        .game-cell.filled {
+            cursor: default;
+        }
+
+        .game-cell.win-cell {
+            background: #fff1a8;
+            transform: scale(1.04);
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .game-reset {
+            border: 2px solid #ffd1dc;
+            background: white;
+            color: var(--pink-main);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            cursor: pointer;
         }
 
         /* Slide 6: Promises Checklist */
@@ -373,20 +402,73 @@
             border-color: var(--pink-main);
         }
 
-        /* Slide 7: Reasons Flip Card */
-        .card-container {
+        /* Slide 7: Reasons Flip Cards */
+        .reasons-grid {
             width: 100%;
-            max-width: 320px;
-            height: 220px;
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin: 10px 0 18px;
+        }
+
+        .reason-card {
+            height: 142px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .reason-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.65s ease;
+            transform-style: preserve-3d;
+        }
+
+        .reason-card.flipped .reason-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .reason-card-face {
+            position: absolute;
+            inset: 0;
+            border-radius: 18px;
+            padding: 15px 12px;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
+            justify-content: center;
+            text-align: center;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            box-shadow: 0 7px 18px rgba(0,0,0,0.06);
+        }
+
+        .reason-front {
+            background: white;
+            white-space: nowrap;
+            color: var(--pink-main);
+            font-family: 'Fredoka', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .reason-back {
+            background: #fff0f4;
+            color: var(--text-dark);
+            transform: rotateY(180deg);
+            font-size: 12.5px;
+            line-height: 1.45;
+            font-weight: 700;
+        }
+
+        .reason-hint {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 360px) {
+            .reasons-grid { grid-template-columns: 1fr; }
         }
 
         /* Slide 8: Soundtrack Player */
@@ -563,6 +645,9 @@
 </head>
 <body class="bg-pattern-yellow" id="body-bg">
 
+    <!-- Persistent playlist: keep these MP3 files in the same GitHub folder as index.html. -->
+    <audio id="background-audio" loop preload="auto"></audio>
+
     <!-- Header Navigation -->
     <div class="header-nav">
         <button class="nav-btn" id="back-btn" onclick="prevSlide()" style="visibility: hidden;">
@@ -674,7 +759,8 @@
         <!-- SLIDE 5: Win My Heart Tic-Tac-Toe -->
         <div class="slide" id="slide-5">
             <h2>Match Day: Win My Heart</h2>
-            <p style="font-size: 14px;">You: ⚽ | Me: 🏆</p>
+            <p style="font-size: 14px;">You: ⚽ &nbsp;|&nbsp; Me: 🏆</p>
+            <p id="game-turn" style="font-size: 12px; color: #888;">Your turn — make the first move!</p>
             <div class="game-grid" id="game-grid">
                 <div class="game-cell" onclick="makeMove(this, 0)"></div>
                 <div class="game-cell" onclick="makeMove(this, 1)"></div>
@@ -686,8 +772,11 @@
                 <div class="game-cell" onclick="makeMove(this, 7)"></div>
                 <div class="game-cell" onclick="makeMove(this, 8)"></div>
             </div>
-            <p id="game-status" style="font-weight: 700; color: var(--pink-main);"></p>
-            <button class="btn-primary" id="game-next" style="display:none;" onclick="nextSlide()">Next Half &#8594;</button>
+            <p id="game-status" style="font-weight: 700; color: var(--pink-main); min-height: 22px;"></p>
+            <div class="game-controls">
+                <button class="game-reset" onclick="resetTicTacToe()">↻ Reset Match</button>
+                <button class="btn-primary" id="game-next" style="display:none;" onclick="nextSlide()">Next Half &#8594;</button>
+            </div>
         </div>
 
         <!-- SLIDE 6: Promises Checklist -->
@@ -730,30 +819,86 @@
 
         <!-- SLIDE 7: Why I Love You Reasons -->
         <div class="slide" id="slide-7">
-            <h2>Why You're My MVP</h2>
-            <div class="card-container">
-                <div class="mascot-box" style="width: 80px; height: 80px; margin-bottom: 10px;">
-                    <span style="font-size: 35px;">&#127775;</span>
+            <h2>Why You're My MVP 💛</h2>
+            <p class="reason-hint">Tap each card to find out what's on the other side.</p>
+            <div class="reasons-grid" id="reasons-grid">
+                <div class="reason-card" onclick="flipReason(this)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-face reason-front">Your Aura ✨</div>
+                        <div class="reason-card-face reason-back">There is something about your aura that draws me in every single time.</div>
+                    </div>
                 </div>
-                <p id="reason-text" style="font-weight: 700; color: var(--text-dark);">
-                    "Because your passion for the game is something I will always admire."
-                </p>
+                <div class="reason-card" onclick="flipReason(this)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-face reason-front">Your Passion ⚽</div>
+                        <div class="reason-card-face reason-back">I love how passionate you are about your game and how you keep chasing what you love.</div>
+                    </div>
+                </div>
+                <div class="reason-card" onclick="flipReason(this)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-face reason-front">Your Attitude ❤️</div>
+                        <div class="reason-card-face reason-back">I love the way you carry yourself, keep going and give your best even when things get difficult.</div>
+                    </div>
+                </div>
+                <div class="reason-card" onclick="flipReason(this)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-face reason-front">You Look Out For Me 🫶</div>
+                        <div class="reason-card-face reason-back">You make me feel safe because you look out for me and make sure I am okay.</div>
+                    </div>
+                </div>
+                <div class="reason-card" onclick="flipReason(this)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-face reason-front">Your Care 🌷</div>
+                        <div class="reason-card-face reason-back">Even when I am ill or having a migraine, you take care of me in ways that mean more than you know.</div>
+                    </div>
+                </div>
+                <div class="reason-card" onclick="flipReason(this)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-face reason-front">Your Little Efforts 💌</div>
+                        <div class="reason-card-face reason-back">Your thoughtful gestures and little efforts make me feel loved, even when you probably don't realise I notice them.</div>
+                    </div>
+                </div>
+                <div class="reason-card" onclick="flipReason(this)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-face reason-front">Watching You Play 🏆</div>
+                        <div class="reason-card-face reason-back">I love watching you play and seeing how much the game means to you. I will always be proud to cheer for you.</div>
+                    </div>
+                </div>
+                <div class="reason-card" onclick="flipReason(this)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-face reason-front">Our LDR 🌙</div>
+                        <div class="reason-card-face reason-back">The distance may give us miles between us, but it won't stop us. We will conquer this LDR together, one day at a time.</div>
+                    </div>
+                </div>
+                <div class="reason-card" onclick="flipReason(this)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-face reason-front">My Favorite Person 🥹</div>
+                        <div class="reason-card-face reason-back">No matter where life takes us, I want to keep choosing you, supporting your dreams and being your biggest fan.</div>
+                    </div>
+                </div>
+                <div class="reason-card" onclick="flipReason(this)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-face reason-front">Just You ❤️</div>
+                        <div class="reason-card-face reason-back">Because you are you — my Bala, my Sweetiee, my Gap King, and my favourite person.</div>
+                    </div>
+                </div>
             </div>
-            <button class="btn-primary" onclick="nextReason()">Next Reason &#8594;</button>
+            <button class="btn-primary" id="reasons-next" style="display:none;" onclick="nextSlide()">I Read Them All ❤️</button>
         </div>
 
         <!-- SLIDE 8: Soundtrack Player -->
         <div class="slide" id="slide-8">
-            <h2>Our Anthem &#127926;</h2>
+            <h2>Our Little Soundtrack &#127926;</h2>
             <div class="music-card">
                 <div class="album-art" id="album-art">
                     <span style="font-size: 50px;">&#127925;</span>
                 </div>
-                <h3>Perfect</h3>
-                <p style="font-size: 13px; font-style: italic; margin-bottom: 10px;">
-                    "If our love story had a soundtrack, this would be playing in the stadium."
+                <h3 id="song-title">Tum Tak ❤️</h3>
+                <p id="song-caption" style="font-size: 13px; font-style: italic; margin-bottom: 10px;">
+                    "For us — through every mile, every game, every little moment... Tum Tak."
                 </p>
-                <button class="play-btn" onclick="toggleAudio()">&#9654;</button>
+                <button class="play-btn" onclick="toggleAudio()" id="song-play-btn">&#9654;</button>
+                <div id="song-list" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:16px;"></div>
             </div>
             <button class="btn-primary" onclick="nextSlide()">Continue &#8594;</button>
         </div>
@@ -834,49 +979,99 @@
     </div>
 
     <script>
-        let audioCtx = null;
+        // Persistent soundtrack playlist. Keep all MP3 files beside index.html on GitHub.
+        const backgroundAudio = document.getElementById('background-audio');
+        const playlist = [
+            {
+                title: 'Tum Tak ❤️',
+                file: 'Tum Tak Raanjhanaa 128 Kbps.mp3',
+                caption: 'For us — through every mile, every game, every little moment... Tum Tak.'
+            },
+            {
+                title: 'Kakan 🌙',
+                file: 'Kakan.mp3',
+                caption: 'For the quiet, close-to-the-heart moments that feel like us.'
+            },
+            {
+                title: 'Enna Sona 🤍',
+                file: 'Enna Sona.mp3',
+                caption: 'For the LDR days — missing you, choosing you, and waiting for us.'
+            },
+            {
+                title: 'Bade Achhe Lagte Hain ✨',
+                file: 'Bade Achhe Lagte Hain.mp3',
+                caption: 'For that simple feeling of being happy just because it is you.'
+            }
+        ];
+        let currentSong = 0;
         let isPlaying = false;
-        let melodyInterval = null;
 
-        const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88];
+        function setSong(index, autoplay = false) {
+            currentSong = index;
+            const song = playlist[index];
+            backgroundAudio.src = './' + encodeURIComponent(song.file).replace(/%2F/g, '/');
+            backgroundAudio.load();
+            document.getElementById('song-title').textContent = song.title;
+            document.getElementById('song-caption').textContent = song.caption;
+            document.querySelectorAll('.song-choice').forEach((btn, i) => {
+                btn.style.fontWeight = i === index ? '700' : '500';
+                btn.style.transform = i === index ? 'scale(1.04)' : 'scale(1)';
+            });
+            if (autoplay) startMusic();
+        }
 
-        function playRomanticNote() {
-            if (!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            
-            osc.type = 'sine';
-            const randomNote = notes[Math.floor(Math.random() * notes.length)];
-            osc.frequency.setValueAtTime(randomNote, audioCtx.currentTime);
-            
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
-            
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            osc.start();
-            osc.stop(audioCtx.currentTime + 1.5);
+        function renderPlaylist() {
+            const list = document.getElementById('song-list');
+            if (!list) return;
+            list.innerHTML = playlist.map((song, i) =>
+                `<button class="song-choice" onclick="selectSong(${i})" style="border:1px solid rgba(255,105,180,.35); border-radius:999px; padding:8px 12px; background:#fff; cursor:pointer; font-size:12px;">${song.title}</button>`
+            ).join('');
+        }
+
+        function selectSong(index) {
+            const wasPlaying = isPlaying;
+            setSong(index, wasPlaying);
+        }
+
+        async function startMusic() {
+            try {
+                await backgroundAudio.play();
+                isPlaying = true;
+                document.getElementById('music-icon').innerHTML = '&#10084; MUSIC ON';
+                document.getElementById('song-play-btn').innerHTML = '&#10074;&#10074;';
+                document.getElementById('album-art')?.classList.add('playing');
+            } catch (err) {
+                // Browsers can block autoplay until the visitor interacts with the page.
+                isPlaying = false;
+            }
+        }
+
+        function stopMusic() {
+            backgroundAudio.pause();
+            isPlaying = false;
+            document.getElementById('music-icon').innerHTML = '&#9835; MUSIC OFF';
+            document.getElementById('song-play-btn').innerHTML = '&#9654;';
+            document.getElementById('album-art')?.classList.remove('playing');
         }
 
         function toggleAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            
-            if (isPlaying) {
-                clearInterval(melodyInterval);
-                isPlaying = false;
-                document.getElementById('music-icon').innerHTML = '&#9835;';
-                document.getElementById('album-art')?.classList.remove('playing');
-            } else {
-                audioCtx.resume();
-                melodyInterval = setInterval(playRomanticNote, 600);
-                isPlaying = true;
-                document.getElementById('music-icon').innerHTML = '&#10084;';
-                document.getElementById('album-art')?.classList.add('playing');
-            }
+            if (isPlaying) stopMusic();
+            else startMusic();
         }
+
+        // Start the selected song after the first normal page interaction.
+        document.addEventListener('click', () => {
+            if (!isPlaying) startMusic();
+        }, { once: true });
+
+        backgroundAudio.addEventListener('ended', () => {
+            // Because the audio element loops, this normally never fires.
+            // Kept as a safe fallback if loop is changed later.
+            setSong((currentSong + 1) % playlist.length, true);
+        });
+
+        renderPlaylist();
+        setSong(0, false);
 
         let currentSlide = 1;
         const totalSlides = 12;
@@ -917,6 +1112,10 @@
             if (currentSlide === 4) {
                 runCompatibilityCounter();
             }
+
+            if (currentSlide === 5) {
+                resetTicTacToe();
+            }
         }
 
         function nextSlide() {
@@ -935,13 +1134,9 @@
 
         function restartApp() {
             currentSlide = 1;
-            board = ['', '', '', '', '', '', '', '', ''];
-            gameActive = true;
+            resetTicTacToe();
             quizIndex = 0;
             quizScore = 0;
-            document.querySelectorAll('.game-cell').forEach(c => c.textContent = '');
-            document.getElementById('game-status').textContent = '';
-            document.getElementById('game-next').style.display = 'none';
             document.getElementById('quiz-next').style.display = 'none';
             updateSlide();
         }
@@ -965,67 +1160,67 @@
         // EDIT YOUR FAVORITES QUIZ QUESTIONS HERE!
         const quizData = [
             {
-                question: "What food can I almost never say no to?",
-                options: ["Pizza 🍕", "Momos 🥟", "Pasta 🍝", "Fries 🍟"],
+                question: "If I had to pick one comfort food, what am I choosing?",
+                options: ["Pizza 🍕", "Momos 🥟", "Pasta 🍝", "Noodles 🍜"],
                 answer: 1,
-                correctMsg: "GOAL! You really know your girl! 🥟💛",
-                wrongMsg: "Yellow Card! 🟨 You need to know my cravings better!"
+                correctMsg: "GOAL! 🥟 You know my comfort food too well! 💛",
+                wrongMsg: "Yellow Card! 🟨 You know the choices, but you missed my actual weakness!"
             },
             {
-                question: "Which colour feels the most like me?",
-                options: ["Pink 🌸", "Blue 🩵", "Yellow 💛", "Purple 💜"],
+                question: "Which colour would I pick without thinking twice?",
+                options: ["Lavender 💜", "Sky Blue 🩵", "Yellow 💛", "Baby Pink 🌸"],
                 answer: 2,
-                correctMsg: "Top corner! 💛 You know my colour!",
-                wrongMsg: "Offside! 🟨 Think sunshine!"
+                correctMsg: "TOP CORNER! 💛 Yellow was always the answer!",
+                wrongMsg: "Offside! 🟨 Think sunshine, warmth and my favourite colour."
             },
             {
-                question: "What can instantly make me happy?",
-                options: ["Shopping 🛍️", "A surprise gift 🎁", "Bappa and you ❤️", "Going out ✨"],
+                question: "What combination can instantly make me happy?",
+                options: ["Ice cream and a movie 🍦", "A surprise from you 🎁", "Bappa and you ❤️", "A day out together ✨"],
                 answer: 2,
-                correctMsg: "HAT-TRICK! ❤️ You know exactly where my happiness lives!",
-                wrongMsg: "VAR says... close, but you forgot two very important things! 😭❤️"
+                correctMsg: "HAT-TRICK! ❤️ You remembered the two things that can instantly make me happy.",
+                wrongMsg: "Close! 😭 You forgot the two very important parts of my answer."
             },
             {
-                question: "Where do I dream of going with you?",
-                options: ["Paris 🇫🇷", "Spain 🇪🇸", "Switzerland 🇨🇭", "Bali 🌴"],
+                question: "If we could pick one dream destination together, where am I taking you?",
+                options: ["Italy 🇮🇹", "Spain 🇪🇸", "Switzerland 🇨🇭", "Greece 🇬🇷"],
                 answer: 1,
-                correctMsg: "GOOOAL! 🇪🇸 One day, Spain together! ✈️❤️",
-                wrongMsg: "Wrong destination! 🗺️ Better check our dream-trip list!"
+                correctMsg: "GOOOAL! 🇪🇸 Spain is officially on our list! ✈️❤️",
+                wrongMsg: "Wrong destination! 🗺️ Think of the place I've always wanted to go with you."
             },
             {
-                question: "Which name from you makes me the softest?",
-                options: ["Princess 👑", "Bala / Sweetiee 🥹❤️", "Baby 🧸", "Sunshine ☀️"],
+                question: "Which name from you is most likely to make me instantly soft?",
+                options: ["Baby 🧸", "Bala / Sweetiee 🥹❤️", "Princess 👑", "Sunshine ☀️"],
                 answer: 1,
-                correctMsg: "That's my weakness! 🥹❤️ Bala / Sweetiee wins!",
-                wrongMsg: "Nope! You know the name that makes me melt! 😉"
+                correctMsg: "That's the one! 🥹❤️ Bala / Sweetiee has a special place in my heart.",
+                wrongMsg: "Replay! 🔄 You definitely know which names are my weakness."
             },
             {
                 question: "What about you melts my heart the most?",
-                options: ["Your smile 😊", "Your efforts, care and thoughtful gestures ❤️", "Your jokes 😂", "Your style 😎"],
+                options: ["Your smile and laugh 😊", "Your efforts, care and thoughtful gestures ❤️", "Your confidence and style 😎", "Your jokes and teasing 😂"],
                 answer: 1,
-                correctMsg: "GOAL! It's the little things you do that mean everything. ❤️",
-                wrongMsg: "Close! It's the effort and care behind everything you do. 🥹"
+                correctMsg: "GOAL! ❤️ It's the effort and care behind the little things you do.",
+                wrongMsg: "Close! 🥹 Look beyond the obvious — it's the effort, care and thought behind your actions."
             },
             {
-                question: "What is our legendary inside joke? 👀",
-                options: ["Goal King ⚽", "Gap King 😭❤️", "Match King 🏆", "Drama King 😂"],
+                question: "What is the inside joke that needs absolutely no explanation between us?",
+                options: ["Goal King ⚽", "Gap King 😭❤️", "Captain King 🏆", "Drama King 😂"],
                 answer: 1,
-                correctMsg: "GAP KING! 😭😂 If you know, you KNOW!",
-                wrongMsg: "Yellow Card! 🟨 How could you forget GAP KING?! 😭"
+                correctMsg: "GAP KING! 😭😂 If you know, you KNOW.",
+                wrongMsg: "Yellow Card! 🟨 There is only one legendary answer here."
             },
             {
-                question: "What was the FIRST thing I noticed about you?",
-                options: ["Your smile 😊", "Your voice 🎙️", "Your tattoos 👀❤️", "Your hair 😌"],
+                question: "What caught my attention first when I noticed you?",
+                options: ["Your smile 😊", "Your eyes 👀", "Your tattoos 🖤", "Your hair 😌"],
                 answer: 2,
-                correctMsg: "FIRST IMPRESSION GOAL! 👀 Your tattoos caught my attention! ❤️",
-                wrongMsg: "Replay! 🔄 Think about the very first thing that caught my eye!"
+                correctMsg: "FIRST IMPRESSION GOAL! 👀 Your tattoos caught my attention first. ❤️",
+                wrongMsg: "Replay! 🔄 Think about the very first detail that caught my eye."
             },
             {
-                question: "What do I love about you more than I can put into words?",
-                options: ["Your aura ✨", "Your passion for the game ⚽", "Your attitude and the way you care for me ❤️", "All of you. Always. 🥹❤️"],
+                question: "Which part of you could I never choose just one answer for?",
+                options: ["Your aura and attitude ✨", "Your passion for the game ⚽", "Your care and the way you look out for me ❤️", "All of you — including every little thing 🥹❤️"],
                 answer: 3,
-                correctMsg: "CHAMPION! 🏆 You got it — it's all of you. ❤️",
-                wrongMsg: "Trick question... it's ALL of you. Always. ❤️"
+                correctMsg: "CHAMPION! 🏆 It's all of you — your aura, passion, attitude, care and every little thing.",
+                wrongMsg: "Trick question! ❤️ Those are all reasons, but the real answer is ALL of you."
             }
         ];
 
@@ -1104,49 +1299,155 @@
             }, 30);
         }
 
-        // Tic Tac Toe Game Logic
+        // Tic Tac Toe Game Logic — player uses ⚽, computer uses 🏆
         let board = ['', '', '', '', '', '', '', '', ''];
         let gameActive = true;
+        let playerTurn = true;
+
+        const winPatterns = [
+            [0,1,2], [3,4,5], [6,7,8],
+            [0,3,6], [1,4,7], [2,5,8],
+            [0,4,8], [2,4,6]
+        ];
+
+        function resetTicTacToe() {
+            board = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            playerTurn = true;
+            document.querySelectorAll('.game-cell').forEach(cell => {
+                cell.textContent = '';
+                cell.classList.remove('filled', 'win-cell');
+            });
+            document.getElementById('game-status').textContent = '';
+            document.getElementById('game-turn').textContent = 'Your turn — make the first move!';
+            document.getElementById('game-next').style.display = 'none';
+        }
 
         function makeMove(cell, index) {
-            if (board[index] !== '' || !gameActive) return;
+            if (!gameActive || !playerTurn || board[index] !== '') return;
 
             board[index] = '⚽';
             cell.textContent = '⚽';
+            cell.classList.add('filled');
 
-            if (checkWin('⚽')) {
-                endGame("GOAL! You won the match... and my heart! ⚽❤️");
+            const playerWin = getWinningPattern('⚽');
+            if (playerWin) {
+                finishGame('GOAL! You won the match... and my heart! ⚽❤️', playerWin);
                 return;
             }
 
-            let emptyIndices = board.map((val, idx) => val === '' ? idx : null).filter(val => val !== null);
-            if (emptyIndices.length > 0) {
-                let aiMove = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-                board[aiMove] = '🏆';
-                setTimeout(() => {
-                    const cells = document.querySelectorAll('.game-cell');
-                    cells[aiMove].textContent = '🏆';
-                    if (checkWin('🏆')) {
-                        endGame("You played great! You still win my heart 🏆");
-                    }
-                }, 300);
-            } else {
-                endGame("It's a tie, but you're still my champion!");
+            if (board.every(Boolean)) {
+                finishGame("It's a tie — but you're still my champion! 🏆❤️");
+                return;
             }
+
+            playerTurn = false;
+            document.getElementById('game-turn').textContent = 'My turn... 🏆';
+            setTimeout(computerMove, 450);
         }
 
-        function checkWin(symbol) {
-            const wins = [
-                [0,1,2], [3,4,5], [6,7,8],
-                [0,3,6], [1,4,7], [2,5,8],
-                [0,4,8], [2,4,6]
-            ];
-            return wins.some(comb => comb.every(i => board[i] === symbol));
+        function computerMove() {
+            if (!gameActive) return;
+
+            const move = findBestMove();
+            if (move === -1) {
+                finishGame("It's a tie — but you're still my champion! 🏆❤️");
+                return;
+            }
+
+            board[move] = '🏆';
+            const cell = document.querySelectorAll('.game-cell')[move];
+            cell.textContent = '🏆';
+            cell.classList.add('filled');
+
+            const computerWin = getWinningPattern('🏆');
+            if (computerWin) {
+                finishGame('What a match! 🏆 You still win my heart. ❤️', computerWin);
+                return;
+            }
+
+            if (board.every(Boolean)) {
+                finishGame("It's a tie — but you're still my champion! 🏆❤️");
+                return;
+            }
+
+            playerTurn = true;
+            document.getElementById('game-turn').textContent = 'Your turn — make your move! ⚽';
         }
 
-        function endGame(message) {
+        function getWinningPattern(symbol) {
+            return winPatterns.find(pattern => pattern.every(index => board[index] === symbol)) || null;
+        }
+
+        function findBestMove() {
+            // Prefer a winning move, then block the player's winning move, then use minimax.
+            for (const index of getEmptyCells()) {
+                board[index] = '🏆';
+                if (getWinningPattern('🏆')) { board[index] = ''; return index; }
+                board[index] = '';
+            }
+
+            for (const index of getEmptyCells()) {
+                board[index] = '⚽';
+                if (getWinningPattern('⚽')) { board[index] = ''; return index; }
+                board[index] = '';
+            }
+
+            let bestScore = -Infinity;
+            let bestMove = -1;
+            for (const index of getEmptyCells()) {
+                board[index] = '🏆';
+                const score = minimax(board, 0, false);
+                board[index] = '';
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMove = index;
+                }
+            }
+            return bestMove;
+        }
+
+        function minimax(state, depth, maximizing) {
+            if (hasWinner(state, '🏆')) return 10 - depth;
+            if (hasWinner(state, '⚽')) return depth - 10;
+            if (state.every(Boolean)) return 0;
+
+            const empty = state.map((value, index) => value === '' ? index : -1).filter(index => index !== -1);
+            if (maximizing) {
+                let best = -Infinity;
+                empty.forEach(index => {
+                    state[index] = '🏆';
+                    best = Math.max(best, minimax(state, depth + 1, false));
+                    state[index] = '';
+                });
+                return best;
+            }
+
+            let best = Infinity;
+            empty.forEach(index => {
+                state[index] = '⚽';
+                best = Math.min(best, minimax(state, depth + 1, true));
+                state[index] = '';
+            });
+            return best;
+        }
+
+        function hasWinner(state, symbol) {
+            return winPatterns.some(pattern => pattern.every(index => state[index] === symbol));
+        }
+
+        function getEmptyCells() {
+            return board.map((value, index) => value === '' ? index : -1).filter(index => index !== -1);
+        }
+
+        function finishGame(message, winningPattern = null) {
             gameActive = false;
+            playerTurn = false;
+            if (winningPattern) {
+                winningPattern.forEach(index => document.querySelectorAll('.game-cell')[index].classList.add('win-cell'));
+            }
             document.getElementById('game-status').textContent = message;
+            document.getElementById('game-turn').textContent = '';
             document.getElementById('game-next').style.display = 'inline-block';
         }
 
@@ -1158,26 +1459,12 @@
             }
         }
 
-        const reasons = [
-            '"Because I love your aura — there is just something about you that draws me in every single time."',
-            '"Because your passion for the game is one of the things I admire most about you. I love seeing you chase what you love."',
-            '"Because I love your attitude — the way you carry yourself, keep going and give your best."',
-            '"Because you make me feel safe. I love knowing that you look out for me and are always there for me."',
-            '"Because even when I am not feeling well, you take care of me. Especially on the days when I have a migraine, your care means more than you know."',
-            '"Because your efforts and thoughtful little gestures make me feel loved in ways you probably do not even realise."',
-            '"Because I love watching you play, seeing your passion and knowing how much the game means to you. I will always be proud to cheer for you."',
-            '"Because with you, even the ordinary moments become memories I want to keep forever."',
-            '"Because distance may give us miles between us, but it will never change what we are building together. We will conquer this LDR, one day at a time."',
-            '"Because no matter where life takes us, I want to keep choosing you, supporting your dreams and being your biggest fan."',
-            '"And most of all, because you are you — my Bala, my Sweetiee, my Gap King, and my favourite person. ❤️"'
-        ];
-        let reasonIdx = 0;
-
-        function nextReason() {
-            reasonIdx = (reasonIdx + 1) % reasons.length;
-            document.getElementById('reason-text').textContent = reasons[reasonIdx];
-            if (reasonIdx === reasons.length - 1) {
-                setTimeout(() => nextSlide(), 1200);
+        function flipReason(card) {
+            card.classList.toggle('flipped');
+            const total = document.querySelectorAll('.reason-card').length;
+            const flipped = document.querySelectorAll('.reason-card.flipped').length;
+            if (flipped === total) {
+                document.getElementById('reasons-next').style.display = 'inline-block';
             }
         }
 
