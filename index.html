@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Boyfriend Day, Baby!</title>
+    <title>Happy Boyfriend Day, My MVP!</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,6 +14,8 @@
             --text-dark: #4a4a4a;
             --bg-yellow: #fffdf0;
             --bg-blue: #f0f8ff;
+            --green-correct: #4caf50;
+            --red-wrong: #f44336;
         }
 
         * {
@@ -177,20 +179,6 @@
             border: 4px solid #fff;
         }
 
-        .mascot-box img, .mascot-box svg {
-            width: 120px;
-            height: 120px;
-        }
-
-        /* Slide 1: Welcome */
-        .frog-card {
-            background: #e3f6f5;
-            border: 3px solid #ffd1dc;
-            padding: 20px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-        }
-
         /* Slide 2: This or That */
         .this-that-container {
             display: flex;
@@ -222,7 +210,7 @@
             background: transparent;
             border-radius: 14px;
             font-family: 'Fredoka', sans-serif;
-            font-size: 16px;
+            font-size: 15px;
             color: #555;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -242,13 +230,71 @@
             font-weight: 700;
         }
 
-        /* Slide 3: Question */
-        .question-card {
+        /* Slide 3: Quiz Card */
+        .quiz-card {
             background: white;
-            border-radius: 20px;
-            padding: 30px 20px;
+            border-radius: 24px;
+            padding: 24px 20px;
             width: 100%;
             box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .quiz-progress {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--pink-main);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .quiz-opt-btn {
+            background: #f9f9f9;
+            border: 2px solid #eee;
+            padding: 12px;
+            border-radius: 16px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .quiz-opt-btn:hover {
+            border-color: var(--pink-main);
+            background: var(--pink-light);
+        }
+
+        .quiz-opt-btn.correct {
+            background: #e8f5e9 !important;
+            border-color: var(--green-correct) !important;
+            color: var(--green-correct) !important;
+        }
+
+        .quiz-opt-btn.wrong {
+            background: #ffebee !important;
+            border-color: var(--red-wrong) !important;
+            color: var(--red-wrong) !important;
+        }
+
+        .quiz-feedback {
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 15px;
+            min-height: 20px;
         }
 
         /* Slide 4: Compatibility Result */
@@ -422,7 +468,7 @@
             align-items: center;
             justify-content: center;
             color: #aaa;
-            font-size: 24px;
+            font-size: 28px;
         }
 
         .polaroid-caption {
@@ -487,7 +533,7 @@
         /* Kiss Effect Overlay */
         .kiss-mark {
             position: fixed;
-            font-size: 40px;
+            font-size: 32px;
             pointer-events: none;
             animation: popAndFade 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             z-index: 1000;
@@ -532,25 +578,17 @@
         <!-- SLIDE 1: Intro / Cover -->
         <div class="slide active" id="slide-1">
             <div class="mascot-box">
-                <svg viewBox="0 0 100 100">
-                    <circle cx="35" cy="25" r="12" fill="#a8e6cf"/>
-                    <circle cx="65" cy="25" r="12" fill="#a8e6cf"/>
-                    <circle cx="35" cy="25" r="5" fill="#333"/>
-                    <circle cx="65" cy="25" r="5" fill="#333"/>
-                    <path d="M 20 50 Q 50 20 80 50 Q 80 85 50 85 Q 20 85 20 50 Z" fill="#a8e6cf"/>
-                    <path d="M 40 55 Q 50 65 60 55" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <path d="M 50 62 L 43 72 L 57 72 Z" fill="#ff6b8b"/>
-                </svg>
+                <span style="font-size: 60px;">⚽❤️</span>
             </div>
-            <h1>Happy Boyfriend Day, Baby!</h1>
-            <p>I made a little something just for you..</p>
-            <button class="btn-primary" onclick="nextSlide()">Open My Heart &#10084;</button>
+            <h1>Happy Boyfriend Day, My MVP!</h1>
+            <p>I made a little something just for my star player..</p>
+            <button class="btn-primary" onclick="nextSlide()">Kick Off My Heart &#10084;</button>
         </div>
 
         <!-- SLIDE 2: This or That -->
         <div class="slide" id="slide-2">
             <div class="mascot-box" style="height: auto; padding: 10px;">
-                <span style="font-size: 40px;">&#128038;</span>
+                <span style="font-size: 40px;">&#127937;</span>
             </div>
             <h2>This or That</h2>
             <div class="this-that-container">
@@ -570,10 +608,10 @@
                 </div>
                 <div class="choice-row">
                     <div class="options-group">
-                        <button class="choice-btn" onclick="selectChoice(this, 'drive', 'cozy movie nights &#127871;')">Movie date</button>
-                        <button class="choice-btn" onclick="selectChoice(this, 'drive', 'Windows down, our song on blast &#128163;')">Long drive</button>
+                        <button class="choice-btn" onclick="selectChoice(this, 'drive', '90 minutes on the pitch! &#9917;')">Football match</button>
+                        <button class="choice-btn" onclick="selectChoice(this, 'drive', 'cozy movie dates &#127871;')">Movie date</button>
                     </div>
-                    <div class="choice-hint" id="hint-drive">Windows down, our song on blast &#128163;</div>
+                    <div class="choice-hint" id="hint-drive">90 minutes on the pitch! &#9917;</div>
                 </div>
                 <div class="choice-row">
                     <div class="options-group">
@@ -584,31 +622,42 @@
                 </div>
                 <div class="choice-row">
                     <div class="options-group">
-                        <button class="choice-btn" onclick="selectChoice(this, 'style', 'twinning! &#128085;')">Matching outfits</button>
-                        <button class="choice-btn" onclick="selectChoice(this, 'style', 'Subtle but cute &#128241;')">Matching wallpapers</button>
+                        <button class="choice-btn" onclick="selectChoice(this, 'style', 'Twinning in jerseys! &#9818;')">Matching jerseys</button>
+                        <button class="choice-btn" onclick="selectChoice(this, 'style', 'The ultimate power couple &#10024;')">Matching outfits</button>
                     </div>
-                    <div class="choice-hint" id="hint-style">Subtle but cute &#128241;</div>
+                    <div class="choice-hint" id="hint-style">The ultimate power couple &#10024;</div>
                 </div>
                 <div class="choice-row">
                     <div class="options-group">
-                        <button class="choice-btn" onclick="selectChoice(this, 'me', 'Good choice! &#129702;')">Me</button>
-                        <button class="choice-btn" onclick="selectChoice(this, 'me', 'Everything else &#10084;')">Everything else</button>
+                        <button class="choice-btn" onclick="selectChoice(this, 'me', 'Always your #1 fan! &#127881;')">Me</button>
+                        <button class="choice-btn" onclick="selectChoice(this, 'me', 'Top tier choice! &#10084;')">Football & Me</button>
                     </div>
-                    <div class="choice-hint" id="hint-me">Good choice! &#129702;</div>
+                    <div class="choice-hint" id="hint-me">Always your #1 fan! &#127881;</div>
                 </div>
             </div>
-            <button class="btn-primary" id="this-that-next" style="display:none;" onclick="nextSlide()">Continue &#8594;</button>
+            <button class="btn-primary" id="this-that-next" style="display:none;" onclick="nextSlide()">Next Round &#8594;</button>
         </div>
 
-        <!-- SLIDE 3: Interactive Question -->
+        <!-- SLIDE 3: Interactive Favorites Quiz -->
         <div class="slide" id="slide-3">
-            <div class="mascot-box">
-                <span style="font-size: 50px;">&#128036;</span>
+            <div class="mascot-box" style="width: 100px; height: 100px; margin-bottom: 10px;">
+                <span style="font-size: 40px;">&#127942;</span>
             </div>
-            <div class="question-card">
-                <h2>Do you love me as much as I love you?</h2>
-                <button class="btn-primary" onclick="nextSlide()">Yes, obviously! &#127926;</button>
+            <h2>Match Day Quiz</h2>
+            <p style="font-size: 14px; margin-bottom: 10px;">How well do you know your girl?</p>
+
+            <div class="quiz-card">
+                <div class="quiz-progress" id="quiz-progress">Question 1 / 4</div>
+                <h3 id="quiz-question" style="font-size: 18px; color: var(--text-dark); min-height: 40px; display: flex; align-items: center; justify-content: center;">Loading...</h3>
+
+                <div class="quiz-options" id="quiz-options">
+                    <!-- Options dynamically loaded via JS -->
+                </div>
+
+                <div class="quiz-feedback" id="quiz-feedback"></div>
             </div>
+
+            <button class="btn-primary" id="quiz-next" style="display:none;" onclick="nextSlide()">See Chemistry Result &#8594;</button>
         </div>
 
         <!-- SLIDE 4: Compatibility Calculation -->
@@ -618,14 +667,14 @@
             </div>
             <h2>YOU ARE MY FAVOURITE PERSON</h2>
             <div class="counter-number" id="compat-counter">0%</div>
-            <p id="compat-text">Calculating compatibility...</p>
-            <button class="btn-primary" id="compat-btn" style="display:none;" onclick="nextSlide()">Prove Your Love &#8594;</button>
+            <p id="compat-text">Calculating chemistry...</p>
+            <button class="btn-primary" id="compat-btn" style="display:none;" onclick="nextSlide()">Challenge Me &#8594;</button>
         </div>
 
         <!-- SLIDE 5: Win My Heart Tic-Tac-Toe -->
         <div class="slide" id="slide-5">
-            <h2>Win My Heart</h2>
-            <p style="font-size: 14px;">You: &#10084;&#65039; | Me: &#11088;</p>
+            <h2>Match Day: Win My Heart</h2>
+            <p style="font-size: 14px;">You: ⚽ | Me: 🏆</p>
             <div class="game-grid" id="game-grid">
                 <div class="game-cell" onclick="makeMove(this, 0)"></div>
                 <div class="game-cell" onclick="makeMove(this, 1)"></div>
@@ -638,31 +687,31 @@
                 <div class="game-cell" onclick="makeMove(this, 8)"></div>
             </div>
             <p id="game-status" style="font-weight: 700; color: var(--pink-main);"></p>
-            <button class="btn-primary" id="game-next" style="display:none;" onclick="nextSlide()">Continue &#8594;</button>
+            <button class="btn-primary" id="game-next" style="display:none;" onclick="nextSlide()">Next Half &#8594;</button>
         </div>
 
         <!-- SLIDE 6: Promises Checklist -->
         <div class="slide" id="slide-6">
             <div class="mascot-box" style="height: auto; padding: 10px; width: 120px;">
-                <span style="font-size: 30px;">&#128060;</span>
+                <span style="font-size: 30px;">&#129309;</span>
             </div>
-            <h2>Our Promises</h2>
+            <h2>Our Game Plan (Promises)</h2>
             <div class="promise-list">
                 <div class="promise-item" onclick="togglePromise(this)">
                     <div class="promise-checkbox">&#10003;</div>
-                    <span>Unlimited hugs</span>
+                    <span>Unlimited hugs after a long match</span>
                 </div>
                 <div class="promise-item" onclick="togglePromise(this)">
                     <div class="promise-checkbox">&#10003;</div>
-                    <span>Always listen to your rants</span>
+                    <span>Be your biggest cheerleader in the stands</span>
                 </div>
                 <div class="promise-item" onclick="togglePromise(this)">
                     <div class="promise-checkbox">&#10003;</div>
-                    <span>Never stay angry for too long</span>
+                    <span>Never distract you before game day</span>
                 </div>
                 <div class="promise-item" onclick="togglePromise(this)">
                     <div class="promise-checkbox">&#10003;</div>
-                    <span>Support your dreams</span>
+                    <span>Listen to your post-match analysis</span>
                 </div>
                 <div class="promise-item" onclick="togglePromise(this)">
                     <div class="promise-checkbox">&#10003;</div>
@@ -670,24 +719,24 @@
                 </div>
                 <div class="promise-item" onclick="togglePromise(this)">
                     <div class="promise-checkbox">&#10003;</div>
-                    <span>Choose you, every day</span>
+                    <span>Choose you as my captain, every day</span>
                 </div>
             </div>
             <p id="promise-status" style="font-size: 12px; color: var(--pink-main); margin-top: 15px; visibility: hidden;">
-                Promise accepted and permanently saved in my heart &#10084;
+                Contract signed & permanently saved in my heart! &#10084;
             </p>
             <button class="btn-primary" onclick="nextSlide()">Continue &#8594;</button>
         </div>
 
         <!-- SLIDE 7: Why I Love You Reasons -->
         <div class="slide" id="slide-7">
-            <h2>Why I Love You</h2>
+            <h2>Why You're My MVP</h2>
             <div class="card-container">
                 <div class="mascot-box" style="width: 80px; height: 80px; margin-bottom: 10px;">
-                    <span style="font-size: 35px;">&#127827;</span>
+                    <span style="font-size: 35px;">&#127775;</span>
                 </div>
                 <p id="reason-text" style="font-weight: 700; color: var(--text-dark);">
-                    "Because you make ordinary days special."
+                    "Because your passion on and off the field inspires me."
                 </p>
             </div>
             <button class="btn-primary" onclick="nextReason()">Next Reason &#8594;</button>
@@ -695,14 +744,14 @@
 
         <!-- SLIDE 8: Soundtrack Player -->
         <div class="slide" id="slide-8">
-            <h2>Our Soundtrack &#127926;</h2>
+            <h2>Our Anthem &#127926;</h2>
             <div class="music-card">
                 <div class="album-art" id="album-art">
                     <span style="font-size: 50px;">&#127925;</span>
                 </div>
                 <h3>Perfect</h3>
                 <p style="font-size: 13px; font-style: italic; margin-bottom: 10px;">
-                    "If our love had a soundtrack, this would be it."
+                    "If our love story had a soundtrack, this would be playing in the stadium."
                 </p>
                 <button class="play-btn" onclick="toggleAudio()">&#9654;</button>
             </div>
@@ -711,35 +760,35 @@
 
         <!-- SLIDE 9: Photo Gallery -->
         <div class="slide" id="slide-9">
-            <h2>YOU'RE MY FAV PERSON</h2>
+            <h2>HIGHLIGHT REEL</h2>
             <div class="photo-grid">
                 <div class="polaroid">
-                    <div class="polaroid-img">&#128247;</div>
-                    <div class="polaroid-caption">You be everything I wished &#128155;</div>
+                    <div class="polaroid-img">⚽</div>
+                    <div class="polaroid-caption">My favorite athlete &#128155;</div>
                 </div>
                 <div class="polaroid">
                     <div class="polaroid-img">&#128105;&#8205;&#10084;&#65039;&#8205;&#128184;</div>
-                    <div class="polaroid-caption">My favourite picture of us</div>
+                    <div class="polaroid-caption">My favorite picture of us</div>
+                </div>
+                <div class="polaroid">
+                    <div class="polaroid-img">&#127942;</div>
+                    <div class="polaroid-caption">Winning at life with you</div>
                 </div>
                 <div class="polaroid">
                     <div class="polaroid-img">&#10024;</div>
-                    <div class="polaroid-caption">One moment I want to relive</div>
-                </div>
-                <div class="polaroid">
-                    <div class="polaroid-img">&#128060;</div>
                     <div class="polaroid-caption">Still can't believe you're mine</div>
                 </div>
             </div>
-            <button class="btn-primary" onclick="nextSlide()">next &#8594;</button>
+            <button class="btn-primary" onclick="nextSlide()">Next &#8594;</button>
         </div>
 
         <!-- SLIDE 10: Special Reward Coupon -->
         <div class="slide" id="slide-10">
-            <h2>A Special Reward for You</h2>
+            <h2>Post-Match Reward</h2>
             <div class="coupon-card">
-                <div style="font-size: 40px; margin-bottom: 10px;">&#128140;</div>
-                <p style="font-weight: 800; font-size: 18px; color: var(--pink-main);">LOVE YOU MORE &#10084;</p>
-                <p style="font-size: 14px; margin: 10px 0;">One unlimited hug & a surprise date!</p>
+                <div style="font-size: 40px; margin-bottom: 10px;">&#127915;</div>
+                <p style="font-weight: 800; font-size: 18px; color: var(--pink-main);">CHAMPION'S REWARD &#10084;</p>
+                <p style="font-size: 14px; margin: 10px 0;">Redeemable for: 1 victory hug & a surprise date night!</p>
             </div>
             <button class="btn-primary" onclick="nextSlide()">Claim Reward & Continue</button>
         </div>
@@ -759,26 +808,26 @@
             </div>
             <div class="counter-number" id="hold-counter" style="font-size: 28px;">0%</div>
             <p id="hold-text" style="font-size: 14px; display:none; color: var(--pink-main); font-weight:700;">
-                You've had my whole heart all along.
+                You've had my whole heart all along!
             </p>
-            <button class="btn-primary" id="hold-next" style="display:none;" onclick="nextSlide()">Continue</button>
+            <button class="btn-primary" id="hold-next" style="display:none;" onclick="nextSlide()">Final Whistle</button>
         </div>
 
         <!-- SLIDE 12: Final Letter & Kisses -->
         <div class="slide" id="slide-12">
-            <h2>A Little Something for You</h2>
+            <h2>A Little Letter For My Champion</h2>
             <div class="letter-card">
-                <div class="mascot-box" style="width: 100%; height: 120px; border:none; box-shadow:none;">
-                    <span style="font-size: 50px;">&#128107;</span>
+                <div class="mascot-box" style="width: 100%; height: 100px; border:none; box-shadow:none;">
+                    <span style="font-size: 50px;">⚽❤️️</span>
                 </div>
-                <h3 style="color: var(--pink-main); margin-bottom: 10px;">To my favourite person...</h3>
+                <h3 style="color: var(--pink-main); margin-bottom: 10px;">To my favorite footballer...</h3>
                 <p style="font-size: 14px; line-height: 1.6; color: #555;">
-                    Happy Boyfriend Day, my love. Thank you for being you. You make my world so much brighter just by being in it. Here's to making countless more memories together.
+                    Happy Boyfriend Day, my love! Thank you for working so hard both on and off the field. I'm always cheering for you, no matter what. Here's to scoring many more goals and making countless memories together!
                 </p>
             </div>
-            <button class="btn-primary" onclick="sendKiss()" style="margin-top:20px;">Send Me a Kiss &#128033;</button>
+            <button class="btn-primary" onclick="sendKiss()" style="margin-top:20px;">Send Me Kisses &#128033;</button>
             <button class="nav-btn" onclick="restartApp()" style="margin-top: 15px; background: transparent; border: none; box-shadow: none;">
-                Replay Our Story &#128030;
+                Replay Highlight Reel &#128030;
             </button>
         </div>
 
@@ -861,6 +910,10 @@
             const body = document.getElementById('body-bg');
             body.className = bgThemes[currentSlide] || 'bg-pattern-yellow';
 
+            if (currentSlide === 3) {
+                loadQuizQuestion();
+            }
+
             if (currentSlide === 4) {
                 runCompatibilityCounter();
             }
@@ -882,10 +935,17 @@
 
         function restartApp() {
             currentSlide = 1;
+            board = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            quizIndex = 0;
+            quizScore = 0;
+            document.querySelectorAll('.game-cell').forEach(c => c.textContent = '');
+            document.getElementById('game-status').textContent = '';
+            document.getElementById('game-next').style.display = 'none';
+            document.getElementById('quiz-next').style.display = 'none';
             updateSlide();
         }
 
-        let selections = 0;
         function selectChoice(btn, groupId, hintText) {
             const row = btn.closest('.choice-row');
             row.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
@@ -899,6 +959,93 @@
             if (selectedCount >= 5) {
                 document.getElementById('this-that-next').style.display = 'inline-block';
             }
+        }
+
+        /* --- SLIDE 3: FAVORITES QUIZ LOGIC --- */
+        // EDIT YOUR FAVORITES QUIZ QUESTIONS HERE!
+        const quizData = [
+            {
+                question: "What is my absolute favorite food?",
+                options: ["Pizza 🍕", "Sushi 🍣", "Pasta 🍝", "Ice Cream 🍦"],
+                answer: 2, // 0 = Pizza, 1 = Sushi, 2 = Pasta, 3 = Ice Cream
+                correctMsg: "GOAL! You know my stomach so well! 🍝❤️",
+                wrongMsg: "Yellow Card! 🟨 Close, but nope!"
+            },
+            {
+                question: "What's my ultimate favorite color?",
+                options: ["Baby Pink 🌸", "Sky Blue 🩵", "Lavender 🪻", "Emerald Green 💚"],
+                answer: 0,
+                correctMsg: "Top corner strike! Pink always! 🌸",
+                wrongMsg: "Offside! Try to remember my aesthetic! 😉"
+            },
+            {
+                question: "What is my ideal ideal date with you?",
+                options: ["Fancy dinner date 🍷", "Cozy movie night & takeaway 🎬", "Cheering for you at your match ⚽", "Late night drive 🚗"],
+                answer: 2,
+                correctMsg: "Hat-trick! Being your #1 fan in the stands! ⚽",
+                wrongMsg: "VAR review: Sounds nice, but cheering for you wins!"
+            },
+            {
+                question: "What is my number one favorite thing about you?",
+                options: ["Your smile 😊", "How passionate you are ⚽", "Your cozy hugs 🫂", "All of the above! ❤️"],
+                answer: 3,
+                correctMsg: "CHAMPION! You got 100%! All of you! ❤️🏆",
+                wrongMsg: "Trick question... it's ALL of the above!"
+            }
+        ];
+
+        let quizIndex = 0;
+        let quizScore = 0;
+
+        function loadQuizQuestion() {
+            if (quizIndex >= quizData.length) {
+                document.getElementById('quiz-progress').textContent = "MATCH RESULTS";
+                document.getElementById('quiz-question').textContent = `Quiz Complete! Score: ${quizScore}/${quizData.length} ⚽`;
+                document.getElementById('quiz-options').innerHTML = '';
+                document.getElementById('quiz-feedback').textContent = "You passed the fitness test! You know me inside out! 🥰";
+                document.getElementById('quiz-feedback').style.color = "var(--pink-main)";
+                document.getElementById('quiz-next').style.display = 'inline-block';
+                return;
+            }
+
+            const current = quizData[quizIndex];
+            document.getElementById('quiz-progress').textContent = `Question ${quizIndex + 1} / ${quizData.length}`;
+            document.getElementById('quiz-question').textContent = current.question;
+            document.getElementById('quiz-feedback').textContent = '';
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            current.options.forEach((optText, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-opt-btn';
+                btn.textContent = optText;
+                btn.onclick = () => handleQuizAnswer(i, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleQuizAnswer(selectedIndex, btnElement) {
+            const current = quizData[quizIndex];
+            const allBtns = document.querySelectorAll('.quiz-opt-btn');
+            allBtns.forEach(b => b.onclick = null); // disable further clicking
+
+            if (selectedIndex === current.answer) {
+                btnElement.classList.add('correct');
+                document.getElementById('quiz-feedback').textContent = current.correctMsg;
+                document.getElementById('quiz-feedback').style.color = "var(--green-correct)";
+                quizScore++;
+            } else {
+                btnElement.classList.add('wrong');
+                allBtns[current.answer].classList.add('correct');
+                document.getElementById('quiz-feedback').textContent = current.wrongMsg;
+                document.getElementById('quiz-feedback').style.color = "var(--red-wrong)";
+            }
+
+            setTimeout(() => {
+                quizIndex++;
+                loadQuizQuestion();
+            }, 1800);
         }
 
         function runCompatibilityCounter() {
@@ -915,42 +1062,41 @@
                 if (count >= 100) {
                     count = 100;
                     clearInterval(interval);
-                    text.textContent = "100% compatible — because you're my favourite person.";
+                    text.textContent = "100% match chemistry — you're the undisputed MVP of my life.";
                     btn.style.display = 'inline-block';
                 }
                 counter.textContent = `${count}%`;
             }, 30);
         }
 
-        let board = ['', '', '', '', '', '', '', ''];
+        // Tic Tac Toe Game Logic
+        let board = ['', '', '', '', '', '', '', '', ''];
         let gameActive = true;
 
         function makeMove(cell, index) {
             if (board[index] !== '' || !gameActive) return;
 
-            board[index] = '❤️';
-            cell.textContent = '❤️';
+            board[index] = '⚽';
+            cell.textContent = '⚽';
 
-            if (checkWin('❤️')) {
-                endGame("Looks like you won the game... and my heart.");
+            if (checkWin('⚽')) {
+                endGame("GOAL! You won the match... and my heart! ⚽❤️");
                 return;
             }
 
             let emptyIndices = board.map((val, idx) => val === '' ? idx : null).filter(val => val !== null);
             if (emptyIndices.length > 0) {
                 let aiMove = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-                board[aiMove] = '⭐';
+                board[aiMove] = '🏆';
                 setTimeout(() => {
                     const cells = document.querySelectorAll('.game-cell');
-                    cells[aiMove].textContent = '⭐';
-                    if (checkWin('⭐')) {
-                        endGame("You still won my heart!");
+                    cells[aiMove].textContent = '🏆';
+                    if (checkWin('🏆')) {
+                        endGame("You played great! You still win my heart 🏆");
                     }
                 }, 300);
-            }
-
-            if (!board.includes('') && gameActive) {
-                endGame("It's a tie, but you still win my heart!");
+            } else {
+                endGame("It's a tie, but you're still my champion!");
             }
         }
 
@@ -978,11 +1124,11 @@
         }
 
         const reasons = [
-            '"Because you make ordinary days special."',
-            '"Because you always make me smile."',
-            '"Because I feel safe with you."',
-            '"Because you listen to all my stories."',
-            '"Because you are my favorite person in the world."'
+            '"Because your dedication on and off the pitch inspires me."',
+            '"Because you always make me smile, even after a tough match."',
+            '"Because I feel safest when I\'m right by your side."',
+            '"Because you listen to all my stories with so much patience."',
+            '"Because you are my favorite athlete and favorite human."'
         ];
         let reasonIdx = 0;
 
