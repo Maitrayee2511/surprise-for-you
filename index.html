@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Boyfriend Day, Baby!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink-main: #ff6b8b;
+            --pink-light: #ffebf0;
+            --pink-accent: #ff477e;
+            --blue-grid: #e8f4f8;
+            --text-dark: #4a4a4a;
+            --bg-yellow: #fffdf0;
+            --bg-blue: #f0f8ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-yellow);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
+
+        /* Gingham and Grid Background Patterns */
+        .bg-pattern-yellow {
+            background-color: #fffaf0;
+            background-image: 
+                linear-gradient(90deg, rgba(255, 226, 180, 0.4) 50%, transparent 50%),
+                linear-gradient(rgba(255, 226, 180, 0.4) 50%, transparent 50%);
+            background-size: 40px 40px;
+        }
+
+        .bg-pattern-blue {
+            background-color: #f4f9ff;
+            background-image: 
+                linear-gradient(90deg, rgba(200, 225, 255, 0.4) 50%, transparent 50%),
+                linear-gradient(rgba(200, 225, 255, 0.4) 50%, transparent 50%);
+            background-size: 40px 40px;
+        }
+
+        .bg-pattern-grid {
+            background-color: #ffffff;
+            background-image: 
+                linear-gradient(to right, #f0f0f0 1px, transparent 1px),
+                linear-gradient(to bottom, #f0f0f0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* Header Navigation */
+        .header-nav {
+            position: fixed;
+            top: 15px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: white;
+            border: 2px solid #ffd1dc;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 14px;
+            color: var(--pink-main);
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 107, 139, 0.2);
+        }
+
+        /* App Container and Slides */
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 20px 40px;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: fadeIn 0.5s cubic-bezier(0.39, 0.575, 0.565, 1) forwards;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Common Elements */
+        h1, h2 {
+            font-family: 'Fredoka', sans-serif;
+            color: var(--pink-main);
+            margin-bottom: 12px;
+        }
+
+        h1 { font-size: 28px; }
+        h2 { font-size: 24px; }
+
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .btn-primary {
+            background: var(--pink-main);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255, 107, 139, 0.35);
+            transition: all 0.2s ease;
+            margin-top: 15px;
+        }
+
+        .btn-primary:hover {
+            background: var(--pink-accent);
+            transform: scale(1.03);
+        }
+
+        /* Mascot Container */
+        .mascot-box {
+            width: 180px;
+            height: 180px;
+            background: white;
+            border-radius: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #fff;
+        }
+
+        .mascot-box img, .mascot-box svg {
+            width: 120px;
+            height: 120px;
+        }
+
+        /* Slide 1: Welcome */
+        .frog-card {
+            background: #e3f6f5;
+            border: 3px solid #ffd1dc;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Slide 2: This or That */
+        .this-that-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .choice-row {
+            background: white;
+            border-radius: 18px;
+            padding: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .options-group {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .choice-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid transparent;
+            background: transparent;
+            border-radius: 14px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 16px;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .choice-btn.selected {
+            background: var(--pink-light);
+            border-color: var(--pink-main);
+            color: var(--pink-main);
+        }
+
+        .choice-hint {
+            font-size: 12px;
+            color: var(--pink-main);
+            margin-top: 4px;
+            display: none;
+            font-weight: 700;
+        }
+
+        /* Slide 3: Question */
+        .question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 20px;
+            width: 100%;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+        }
+
+        /* Slide 4: Compatibility Result */
+        .counter-number {
+            font-size: 48px;
+            font-family: 'Fredoka', sans-serif;
+            color: var(--pink-main);
+            margin: 15px 0;
+        }
+
+        /* Slide 5: Tic Tac Toe Game */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 270px;
+            height: 270px;
+            margin: 20px auto;
+        }
+
+        .game-cell {
+            background: white;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            transition: all 0.2s ease;
+        }
+
+        .game-cell:hover {
+            transform: scale(1.02);
+        }
+
+        /* Slide 6: Promises Checklist */
+        .promise-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .promise-item {
+            background: white;
+            padding: 14px 18px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .promise-checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .promise-item.checked .promise-checkbox {
+            background: var(--pink-main);
+            border-color: var(--pink-main);
+        }
+
+        /* Slide 7: Reasons Flip Card */
+        .card-container {
+            width: 100%;
+            max-width: 320px;
+            height: 220px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        /* Slide 8: Soundtrack Player */
+        .music-card {
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .album-art {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: #ffdee9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            border: 4px solid var(--pink-light);
+            animation: spin 12s linear infinite paused;
+        }
+
+        .album-art.playing {
+            animation-play-state: running;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--pink-main);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(255, 107, 139, 0.4);
+        }
+
+        /* Slide 9: Photo Gallery Grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 10px 10px 15px 10px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+            transform: rotate(-2deg);
+        }
+
+        .polaroid:nth-child(even) {
+            transform: rotate(2deg);
+        }
+
+        .polaroid-img {
+            width: 100%;
+            height: 110px;
+            background: #eee;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 24px;
+        }
+
+        .polaroid-caption {
+            font-size: 11px;
+            font-weight: 700;
+            color: #777;
+            margin-top: 8px;
+        }
+
+        /* Slide 10: Love Coupon / Reward */
+        .coupon-card {
+            background: white;
+            border: 2px dashed var(--pink-main);
+            border-radius: 20px;
+            padding: 25px;
+            width: 100%;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+        }
+
+        /* Slide 11: Interactive Hold Heart */
+        .hold-heart-container {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+
+        .heart-svg {
+            width: 100%;
+            height: 100%;
+            fill: #e0e0e0;
+            transition: fill 0.2s ease;
+        }
+
+        .heart-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            clip-path: inset(100% 0 0 0);
+            transition: clip-path 0.1s linear;
+        }
+
+        .heart-fill svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--pink-main);
+        }
+
+        /* Slide 12: Final Letter & Kisses Floating */
+        .letter-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+
+        /* Kiss Effect Overlay */
+        .kiss-mark {
+            position: fixed;
+            font-size: 40px;
+            pointer-events: none;
+            animation: popAndFade 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            z-index: 1000;
+        }
+
+        @keyframes popAndFade {
+            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+            50% { transform: scale(1.2) rotate(0deg); opacity: 1; }
+            100% { transform: scale(1) translateY(-30px); opacity: 0; }
+        }
+
+        /* Floating particles */
+        .heart-particle {
+            position: fixed;
+            pointer-events: none;
+            color: var(--pink-main);
+            font-size: 14px;
+            z-index: 99;
+            animation: floatUp 3s linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.8); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-pattern-yellow" id="body-bg">
+
+    <!-- Header Navigation -->
+    <div class="header-nav">
+        <button class="nav-btn" id="back-btn" onclick="prevSlide()" style="visibility: hidden;">
+            &#8592; BACK
+        </button>
+        <button class="nav-btn" onclick="toggleAudio()">
+            <span id="music-icon">&#9835;</span> MUSIC ON
+        </button>
+    </div>
+
+    <div class="app-container">
+
+        <!-- SLIDE 1: Intro / Cover -->
+        <div class="slide active" id="slide-1">
+            <div class="mascot-box">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="35" cy="25" r="12" fill="#a8e6cf"/>
+                    <circle cx="65" cy="25" r="12" fill="#a8e6cf"/>
+                    <circle cx="35" cy="25" r="5" fill="#333"/>
+                    <circle cx="65" cy="25" r="5" fill="#333"/>
+                    <path d="M 20 50 Q 50 20 80 50 Q 80 85 50 85 Q 20 85 20 50 Z" fill="#a8e6cf"/>
+                    <path d="M 40 55 Q 50 65 60 55" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 50 62 L 43 72 L 57 72 Z" fill="#ff6b8b"/>
+                </svg>
+            </div>
+            <h1>Happy Boyfriend Day, Baby!</h1>
+            <p>I made a little something just for you..</p>
+            <button class="btn-primary" onclick="nextSlide()">Open My Heart &#10084;</button>
+        </div>
+
+        <!-- SLIDE 2: This or That -->
+        <div class="slide" id="slide-2">
+            <div class="mascot-box" style="height: auto; padding: 10px;">
+                <span style="font-size: 40px;">&#128038;</span>
+            </div>
+            <h2>This or That</h2>
+            <div class="this-that-container">
+                <div class="choice-row">
+                    <div class="options-group">
+                        <button class="choice-btn" onclick="selectChoice(this, 'cuddles', 'soft boy vibes &#129303;')">Cuddles</button>
+                        <button class="choice-btn" onclick="selectChoice(this, 'cuddles', 'sweet kisses! &#128536;')">Kisses</button>
+                    </div>
+                    <div class="choice-hint" id="hint-cuddles">soft boy vibes &#129303;</div>
+                </div>
+                <div class="choice-row">
+                    <div class="options-group">
+                        <button class="choice-btn" onclick="selectChoice(this, 'texts', 'texting all day &#128172;')">Texts</button>
+                        <button class="choice-btn" onclick="selectChoice(this, 'texts', 'Hearing your voice is the best &#128222;')">Calls</button>
+                    </div>
+                    <div class="choice-hint" id="hint-texts">Hearing your voice is the best &#128222;</div>
+                </div>
+                <div class="choice-row">
+                    <div class="options-group">
+                        <button class="choice-btn" onclick="selectChoice(this, 'drive', 'cozy movie nights &#127871;')">Movie date</button>
+                        <button class="choice-btn" onclick="selectChoice(this, 'drive', 'Windows down, our song on blast &#128163;')">Long drive</button>
+                    </div>
+                    <div class="choice-hint" id="hint-drive">Windows down, our song on blast &#128163;</div>
+                </div>
+                <div class="choice-row">
+                    <div class="options-group">
+                        <button class="choice-btn" onclick="selectChoice(this, 'fights', 'You just like making up afterwards &#128527;')">Cute fights</button>
+                        <button class="choice-btn" onclick="selectChoice(this, 'fights', 'peace and love always &#128522;')">No fights</button>
+                    </div>
+                    <div class="choice-hint" id="hint-fights">You just like making up afterwards &#128527;</div>
+                </div>
+                <div class="choice-row">
+                    <div class="options-group">
+                        <button class="choice-btn" onclick="selectChoice(this, 'style', 'twinning! &#128085;')">Matching outfits</button>
+                        <button class="choice-btn" onclick="selectChoice(this, 'style', 'Subtle but cute &#128241;')">Matching wallpapers</button>
+                    </div>
+                    <div class="choice-hint" id="hint-style">Subtle but cute &#128241;</div>
+                </div>
+                <div class="choice-row">
+                    <div class="options-group">
+                        <button class="choice-btn" onclick="selectChoice(this, 'me', 'Good choice! &#129702;')">Me</button>
+                        <button class="choice-btn" onclick="selectChoice(this, 'me', 'Everything else &#10084;')">Everything else</button>
+                    </div>
+                    <div class="choice-hint" id="hint-me">Good choice! &#129702;</div>
+                </div>
+            </div>
+            <button class="btn-primary" id="this-that-next" style="display:none;" onclick="nextSlide()">Continue &#8594;</button>
+        </div>
+
+        <!-- SLIDE 3: Interactive Question -->
+        <div class="slide" id="slide-3">
+            <div class="mascot-box">
+                <span style="font-size: 50px;">&#128036;</span>
+            </div>
+            <div class="question-card">
+                <h2>Do you love me as much as I love you?</h2>
+                <button class="btn-primary" onclick="nextSlide()">Yes, obviously! &#127926;</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Compatibility Calculation -->
+        <div class="slide" id="slide-4">
+            <div class="mascot-box">
+                <span style="font-size: 40px;">&#10084;&#65039;</span>
+            </div>
+            <h2>YOU ARE MY FAVOURITE PERSON</h2>
+            <div class="counter-number" id="compat-counter">0%</div>
+            <p id="compat-text">Calculating compatibility...</p>
+            <button class="btn-primary" id="compat-btn" style="display:none;" onclick="nextSlide()">Prove Your Love &#8594;</button>
+        </div>
+
+        <!-- SLIDE 5: Win My Heart Tic-Tac-Toe -->
+        <div class="slide" id="slide-5">
+            <h2>Win My Heart</h2>
+            <p style="font-size: 14px;">You: &#10084;&#65039; | Me: &#11088;</p>
+            <div class="game-grid" id="game-grid">
+                <div class="game-cell" onclick="makeMove(this, 0)"></div>
+                <div class="game-cell" onclick="makeMove(this, 1)"></div>
+                <div class="game-cell" onclick="makeMove(this, 2)"></div>
+                <div class="game-cell" onclick="makeMove(this, 3)"></div>
+                <div class="game-cell" onclick="makeMove(this, 4)"></div>
+                <div class="game-cell" onclick="makeMove(this, 5)"></div>
+                <div class="game-cell" onclick="makeMove(this, 6)"></div>
+                <div class="game-cell" onclick="makeMove(this, 7)"></div>
+                <div class="game-cell" onclick="makeMove(this, 8)"></div>
+            </div>
+            <p id="game-status" style="font-weight: 700; color: var(--pink-main);"></p>
+            <button class="btn-primary" id="game-next" style="display:none;" onclick="nextSlide()">Continue &#8594;</button>
+        </div>
+
+        <!-- SLIDE 6: Promises Checklist -->
+        <div class="slide" id="slide-6">
+            <div class="mascot-box" style="height: auto; padding: 10px; width: 120px;">
+                <span style="font-size: 30px;">&#128060;</span>
+            </div>
+            <h2>Our Promises</h2>
+            <div class="promise-list">
+                <div class="promise-item" onclick="togglePromise(this)">
+                    <div class="promise-checkbox">&#10003;</div>
+                    <span>Unlimited hugs</span>
+                </div>
+                <div class="promise-item" onclick="togglePromise(this)">
+                    <div class="promise-checkbox">&#10003;</div>
+                    <span>Always listen to your rants</span>
+                </div>
+                <div class="promise-item" onclick="togglePromise(this)">
+                    <div class="promise-checkbox">&#10003;</div>
+                    <span>Never stay angry for too long</span>
+                </div>
+                <div class="promise-item" onclick="togglePromise(this)">
+                    <div class="promise-checkbox">&#10003;</div>
+                    <span>Support your dreams</span>
+                </div>
+                <div class="promise-item" onclick="togglePromise(this)">
+                    <div class="promise-checkbox">&#10003;</div>
+                    <span>Share my food... sometimes</span>
+                </div>
+                <div class="promise-item" onclick="togglePromise(this)">
+                    <div class="promise-checkbox">&#10003;</div>
+                    <span>Choose you, every day</span>
+                </div>
+            </div>
+            <p id="promise-status" style="font-size: 12px; color: var(--pink-main); margin-top: 15px; visibility: hidden;">
+                Promise accepted and permanently saved in my heart &#10084;
+            </p>
+            <button class="btn-primary" onclick="nextSlide()">Continue &#8594;</button>
+        </div>
+
+        <!-- SLIDE 7: Why I Love You Reasons -->
+        <div class="slide" id="slide-7">
+            <h2>Why I Love You</h2>
+            <div class="card-container">
+                <div class="mascot-box" style="width: 80px; height: 80px; margin-bottom: 10px;">
+                    <span style="font-size: 35px;">&#127827;</span>
+                </div>
+                <p id="reason-text" style="font-weight: 700; color: var(--text-dark);">
+                    "Because you make ordinary days special."
+                </p>
+            </div>
+            <button class="btn-primary" onclick="nextReason()">Next Reason &#8594;</button>
+        </div>
+
+        <!-- SLIDE 8: Soundtrack Player -->
+        <div class="slide" id="slide-8">
+            <h2>Our Soundtrack &#127926;</h2>
+            <div class="music-card">
+                <div class="album-art" id="album-art">
+                    <span style="font-size: 50px;">&#127925;</span>
+                </div>
+                <h3>Perfect</h3>
+                <p style="font-size: 13px; font-style: italic; margin-bottom: 10px;">
+                    "If our love had a soundtrack, this would be it."
+                </p>
+                <button class="play-btn" onclick="toggleAudio()">&#9654;</button>
+            </div>
+            <button class="btn-primary" onclick="nextSlide()">Continue &#8594;</button>
+        </div>
+
+        <!-- SLIDE 9: Photo Gallery -->
+        <div class="slide" id="slide-9">
+            <h2>YOU'RE MY FAV PERSON</h2>
+            <div class="photo-grid">
+                <div class="polaroid">
+                    <div class="polaroid-img">&#128247;</div>
+                    <div class="polaroid-caption">You be everything I wished &#128155;</div>
+                </div>
+                <div class="polaroid">
+                    <div class="polaroid-img">&#128105;&#8205;&#10084;&#65039;&#8205;&#128184;</div>
+                    <div class="polaroid-caption">My favourite picture of us</div>
+                </div>
+                <div class="polaroid">
+                    <div class="polaroid-img">&#10024;</div>
+                    <div class="polaroid-caption">One moment I want to relive</div>
+                </div>
+                <div class="polaroid">
+                    <div class="polaroid-img">&#128060;</div>
+                    <div class="polaroid-caption">Still can't believe you're mine</div>
+                </div>
+            </div>
+            <button class="btn-primary" onclick="nextSlide()">next &#8594;</button>
+        </div>
+
+        <!-- SLIDE 10: Special Reward Coupon -->
+        <div class="slide" id="slide-10">
+            <h2>A Special Reward for You</h2>
+            <div class="coupon-card">
+                <div style="font-size: 40px; margin-bottom: 10px;">&#128140;</div>
+                <p style="font-weight: 800; font-size: 18px; color: var(--pink-main);">LOVE YOU MORE &#10084;</p>
+                <p style="font-size: 14px; margin: 10px 0;">One unlimited hug & a surprise date!</p>
+            </div>
+            <button class="btn-primary" onclick="nextSlide()">Claim Reward & Continue</button>
+        </div>
+
+        <!-- SLIDE 11: Hold To Fill Heart -->
+        <div class="slide" id="slide-11">
+            <h2>Hold to fill my heart with love.</h2>
+            <div class="hold-heart-container" id="hold-container" onmousedown="startHold()" onmouseup="endHold()" ontouchstart="startHold()" ontouchend="endHold()">
+                <svg class="heart-svg" viewBox="0 0 32 32">
+                    <path d="M16 28.5 C16 28.5 3 20.5 3 11.5 C3 6.5 7 3.5 11.5 3.5 C14.5 3.5 16 5.5 16 5.5 C16 5.5 17.5 3.5 20.5 3.5 C25 3.5 29 6.5 29 11.5 C29 20.5 16 28.5 16 28.5 Z"/>
+                </svg>
+                <div class="heart-fill" id="heart-fill-clip">
+                    <svg viewBox="0 0 32 32">
+                        <path d="M16 28.5 C16 28.5 3 20.5 3 11.5 C3 6.5 7 3.5 11.5 3.5 C14.5 3.5 16 5.5 16 5.5 C16 5.5 17.5 3.5 20.5 3.5 C25 3.5 29 6.5 29 11.5 C29 20.5 16 28.5 16 28.5 Z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="counter-number" id="hold-counter" style="font-size: 28px;">0%</div>
+            <p id="hold-text" style="font-size: 14px; display:none; color: var(--pink-main); font-weight:700;">
+                You've had my whole heart all along.
+            </p>
+            <button class="btn-primary" id="hold-next" style="display:none;" onclick="nextSlide()">Continue</button>
+        </div>
+
+        <!-- SLIDE 12: Final Letter & Kisses -->
+        <div class="slide" id="slide-12">
+            <h2>A Little Something for You</h2>
+            <div class="letter-card">
+                <div class="mascot-box" style="width: 100%; height: 120px; border:none; box-shadow:none;">
+                    <span style="font-size: 50px;">&#128107;</span>
+                </div>
+                <h3 style="color: var(--pink-main); margin-bottom: 10px;">To my favourite person...</h3>
+                <p style="font-size: 14px; line-height: 1.6; color: #555;">
+                    Happy Boyfriend Day, my love. Thank you for being you. You make my world so much brighter just by being in it. Here's to making countless more memories together.
+                </p>
+            </div>
+            <button class="btn-primary" onclick="sendKiss()" style="margin-top:20px;">Send Me a Kiss &#128033;</button>
+            <button class="nav-btn" onclick="restartApp()" style="margin-top: 15px; background: transparent; border: none; box-shadow: none;">
+                Replay Our Story &#128030;
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        let audioCtx = null;
+        let isPlaying = false;
+        let melodyInterval = null;
+
+        const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88];
+
+        function playRomanticNote() {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.type = 'sine';
+            const randomNote = notes[Math.floor(Math.random() * notes.length)];
+            osc.frequency.setValueAtTime(randomNote, audioCtx.currentTime);
+            
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 1.5);
+        }
+
+        function toggleAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            if (isPlaying) {
+                clearInterval(melodyInterval);
+                isPlaying = false;
+                document.getElementById('music-icon').innerHTML = '&#9835;';
+                document.getElementById('album-art')?.classList.remove('playing');
+            } else {
+                audioCtx.resume();
+                melodyInterval = setInterval(playRomanticNote, 600);
+                isPlaying = true;
+                document.getElementById('music-icon').innerHTML = '&#10084;';
+                document.getElementById('album-art')?.classList.add('playing');
+            }
+        }
+
+        let currentSlide = 1;
+        const totalSlides = 12;
+
+        const bgThemes = {
+            1: 'bg-pattern-yellow',
+            2: 'bg-pattern-blue',
+            3: 'bg-pattern-grid',
+            4: 'bg-pattern-yellow',
+            5: 'bg-pattern-blue',
+            6: 'bg-pattern-grid',
+            7: 'bg-pattern-yellow',
+            8: 'bg-pattern-blue',
+            9: 'bg-pattern-grid',
+            10: 'bg-pattern-yellow',
+            11: 'bg-pattern-blue',
+            12: 'bg-pattern-grid'
+        };
+
+        function updateSlide() {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById(`slide-${currentSlide}`).classList.add('active');
+
+            const backBtn = document.getElementById('back-btn');
+            if (currentSlide > 1) {
+                backBtn.style.visibility = 'visible';
+            } else {
+                backBtn.style.visibility = 'hidden';
+            }
+
+            const body = document.getElementById('body-bg');
+            body.className = bgThemes[currentSlide] || 'bg-pattern-yellow';
+
+            if (currentSlide === 4) {
+                runCompatibilityCounter();
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        function restartApp() {
+            currentSlide = 1;
+            updateSlide();
+        }
+
+        let selections = 0;
+        function selectChoice(btn, groupId, hintText) {
+            const row = btn.closest('.choice-row');
+            row.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            const hint = row.querySelector('.choice-hint');
+            hint.textContent = hintText;
+            hint.style.display = 'block';
+
+            const selectedCount = document.querySelectorAll('.choice-btn.selected').length;
+            if (selectedCount >= 5) {
+                document.getElementById('this-that-next').style.display = 'inline-block';
+            }
+        }
+
+        function runCompatibilityCounter() {
+            let count = 0;
+            const counter = document.getElementById('compat-counter');
+            const text = document.getElementById('compat-text');
+            const btn = document.getElementById('compat-btn');
+
+            counter.textContent = '0%';
+            btn.style.display = 'none';
+
+            const interval = setInterval(() => {
+                count += 2;
+                if (count >= 100) {
+                    count = 100;
+                    clearInterval(interval);
+                    text.textContent = "100% compatible — because you're my favourite person.";
+                    btn.style.display = 'inline-block';
+                }
+                counter.textContent = `${count}%`;
+            }, 30);
+        }
+
+        let board = ['', '', '', '', '', '', '', ''];
+        let gameActive = true;
+
+        function makeMove(cell, index) {
+            if (board[index] !== '' || !gameActive) return;
+
+            board[index] = '❤️';
+            cell.textContent = '❤️';
+
+            if (checkWin('❤️')) {
+                endGame("Looks like you won the game... and my heart.");
+                return;
+            }
+
+            let emptyIndices = board.map((val, idx) => val === '' ? idx : null).filter(val => val !== null);
+            if (emptyIndices.length > 0) {
+                let aiMove = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+                board[aiMove] = '⭐';
+                setTimeout(() => {
+                    const cells = document.querySelectorAll('.game-cell');
+                    cells[aiMove].textContent = '⭐';
+                    if (checkWin('⭐')) {
+                        endGame("You still won my heart!");
+                    }
+                }, 300);
+            }
+
+            if (!board.includes('') && gameActive) {
+                endGame("It's a tie, but you still win my heart!");
+            }
+        }
+
+        function checkWin(symbol) {
+            const wins = [
+                [0,1,2], [3,4,5], [6,7,8],
+                [0,3,6], [1,4,7], [2,5,8],
+                [0,4,8], [2,4,6]
+            ];
+            return wins.some(comb => comb.every(i => board[i] === symbol));
+        }
+
+        function endGame(message) {
+            gameActive = false;
+            document.getElementById('game-status').textContent = message;
+            document.getElementById('game-next').style.display = 'inline-block';
+        }
+
+        function togglePromise(item) {
+            item.classList.toggle('checked');
+            const allChecked = document.querySelectorAll('.promise-item.checked').length;
+            if (allChecked >= 3) {
+                document.getElementById('promise-status').style.visibility = 'visible';
+            }
+        }
+
+        const reasons = [
+            '"Because you make ordinary days special."',
+            '"Because you always make me smile."',
+            '"Because I feel safe with you."',
+            '"Because you listen to all my stories."',
+            '"Because you are my favorite person in the world."'
+        ];
+        let reasonIdx = 0;
+
+        function nextReason() {
+            reasonIdx = (reasonIdx + 1) % reasons.length;
+            document.getElementById('reason-text').textContent = reasons[reasonIdx];
+            if (reasonIdx === reasons.length - 1) {
+                setTimeout(() => nextSlide(), 1200);
+            }
+        }
+
+        let holdTimer = null;
+        let holdProgress = 0;
+
+        function startHold() {
+            if (holdProgress >= 100) return;
+            holdTimer = setInterval(() => {
+                holdProgress += 3;
+                if (holdProgress >= 100) {
+                    holdProgress = 100;
+                    clearInterval(holdTimer);
+                    document.getElementById('hold-text').style.display = 'block';
+                    document.getElementById('hold-next').style.display = 'inline-block';
+                }
+                document.getElementById('hold-counter').textContent = `${holdProgress}%`;
+                document.getElementById('heart-fill-clip').style.clipPath = `inset(${100 - holdProgress}% 0 0 0)`;
+            }, 50);
+        }
+
+        function endHold() {
+            clearInterval(holdTimer);
+        }
+
+        function sendKiss() {
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const kiss = document.createElement('div');
+                    kiss.className = 'kiss-mark';
+                    kiss.innerHTML = '&#128033; Muah!';
+                    kiss.style.left = `${Math.random() * 70 + 15}%`;
+                    kiss.style.top = `${Math.random() * 50 + 25}%`;
+                    document.body.appendChild(kiss);
+
+                    setTimeout(() => kiss.remove(), 1200);
+                }, i * 150);
+            }
+        }
+
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.className = 'heart-particle';
+            heart.innerHTML = '&#10084;';
+            heart.style.left = `${Math.random() * 100}vw`;
+            heart.style.bottom = '-20px';
+            heart.style.fontSize = `${Math.random() * 12 + 10}px`;
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 3000);
+        }, 1500);
+    </script>
+</body>
+</html>
