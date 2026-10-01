@@ -625,7 +625,8 @@
 
         .polaroid-img {
             width: 100%;
-            height: 300px;
+            min-height: 220px;
+            max-height: 420px;
             background: #f8f8f8;
             border-radius: 13px;
             display: flex;
@@ -637,10 +638,16 @@
         .polaroid-img img {
             display: block;
             width: 100%;
-            height: 100%;
+            height: auto;
+            max-width: 100%;
+            max-height: 420px;
             object-fit: contain;
             object-position: center;
             border-radius: 13px;
+        }
+
+        .polaroid-img img[src] {
+            background: #f8f8f8;
         }
 
         .polaroid-caption {
@@ -656,11 +663,11 @@
 
         @media (min-width: 650px) {
             .photo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .polaroid-img { height: 260px; }
+            .polaroid-img { min-height: 220px; max-height: 420px; }
         }
 
         @media (max-width: 380px) {
-            .polaroid-img { height: 250px; }
+            .polaroid-img { min-height: 200px; max-height: 360px; }
         }
 
         /* Slide 10: Love Coupon / Reward */
@@ -1141,6 +1148,7 @@
             {
                 title: 'Bade Achhe Lagte Hain ✨',
                 file: 'Bade Achhe Lagte Hain Balika Badhu 128 Kbps.mp3',
+                // Set this to the exact first-vocal timestamp after checking the MP3.
                 startAt: 18,
                 caption: 'This is for the time when you will be away from me. ❤️\n\n“तुम इन सबको छोड़के कैसे कल सुबह जाओगी, मेरे साथ इन्हें भी तो तुम याद बहुत आओगी... बड़े अच्छे लगते हैं — ये धरती, ये नदिया, ये रैना.”'
             },
@@ -1163,32 +1171,85 @@
                 caption: 'This is our song. ❤️\n\n“Mera dil baitha jaa raha hai, Jenny, kyun? America jaane se darr lag raha hai? Nahi! Use chhodne se darr lag raha hai!!”'
             }
         ];
+
         let currentSong = 0;
         let isPlaying = false;
         let openingSongFinished = false;
+        let audioRequestId = 0;
         const openingSongFile = 'Tum Tak Raanjhanaa 128 Kbps.mp3';
 
         function encodeFilePath(file) {
-            return './' + file.split('/').map(part => encodeURI(part)).join('/');
+            return './' + file.split('/').map(part => encodeURIComponent(part).replace(/%2F/g, '/')).join('/');
+        }
+
+        function updateSongButtons() {
+            document.querySelectorAll('.song-choice').forEach((btn, i) => {
+                btn.style.fontWeight = i === currentSong ? '700' : '500';
+                btn.style.transform = i === currentSong ? 'scale(1.04)' : 'scale(1)';
+            });
+        }
+
+        function seekToStart(song) {
+            if (!Number.isFinite(song?.startAt)) return;
+            if (backgroundAudio.readyState >= 1) {
+                const duration = Number.isFinite(backgroundAudio.duration) ? backgroundAudio.duration : Infinity;
+                backgroundAudio.currentTime = Math.min(song.startAt, Math.max(0, duration - 0.25));
+            }
+        }
+
+        async function loadSong(index, autoplay = false) {
+            const request = ++audioRequestId;
+            currentSong = index;
+            const song = playlist[index];
+            const wasPlaying = autoplay || isPlaying;
+
+            backgroundAudio.pause();
+            backgroundAudio.removeAttribute('src');
+            backgroundAudio.load();
+            backgroundAudio.src = encodeFilePath(song.file);
+            backgroundAudio.preload = 'auto';
+            backgroundAudio.loop = false;
+
+            document.getElementById('song-title').textContent = song.title;
+            document.getElementById('song-caption').textContent = song.caption;
+            updateSongButtons();
+            updateSoundtrackUI();
+
+            if (!wasPlaying) return;
+
+            try {
+                await new Promise((resolve, reject) => {
+                    const onReady = () => { cleanup(); resolve(); };
+                    const onError = () => { cleanup(); reject(new Error('Audio could not be loaded')); };
+                    const cleanup = () => {
+                        backgroundAudio.removeEventListener('canplay', onReady);
+                        backgroundAudio.removeEventListener('error', onError);
+                    };
+                    backgroundAudio.addEventListener('canplay', onReady, { once: true });
+                    backgroundAudio.addEventListener('error', onError, { once: true });
+                    backgroundAudio.load();
+                });
+
+                if (request !== audioRequestId) return;
+                seekToStart(song);
+                await backgroundAudio.play();
+                isPlaying = true;
+                document.getElementById('music-icon').innerHTML = '&#10084; MUSIC ON';
+                document.getElementById('song-play-btn').innerHTML = '&#10074;&#10074;';
+                document.getElementById('album-art')?.classList.add('playing');
+                updateSoundtrackUI();
+            } catch (err) {
+                isPlaying = false;
+                document.getElementById('music-icon').innerHTML = '&#9835; MUSIC OFF';
+                document.getElementById('song-play-btn').innerHTML = '&#9654;';
+                document.getElementById('album-art')?.classList.remove('playing');
+                updateSoundtrackUI();
+                console.warn('Music could not start. Check the MP3 filename and browser autoplay permissions.', err);
+            }
         }
 
         function setSong(index, autoplay = false) {
-            currentSong = index;
-            const song = playlist[index];
-            backgroundAudio.loop = false;
-            backgroundAudio.src = encodeFilePath(song.file);
-            backgroundAudio.load();
-            backgroundAudio.addEventListener('loadedmetadata', () => {
-                if (Number.isFinite(song.startAt)) backgroundAudio.currentTime = song.startAt;
-            }, { once: true });
-            document.getElementById('song-title').textContent = song.title;
-            document.getElementById('song-caption').textContent = song.caption;
-            document.querySelectorAll('.song-choice').forEach((btn, i) => {
-                btn.style.fontWeight = i === index ? '700' : '500';
-                btn.style.transform = i === index ? 'scale(1.04)' : 'scale(1)';
-            });
-            updateSoundtrackUI();
-            if (autoplay) playCurrentSong();
+            loadSong(index, autoplay);
         }
 
         function renderPlaylist() {
@@ -1205,6 +1266,7 @@
                     `<button class="soundtrack-option" onclick="selectSongFromHeader(${i})">${song.title}</button>`
                 ).join('');
             }
+            updateSongButtons();
             updateSoundtrackUI();
         }
 
@@ -1228,11 +1290,26 @@
         }
 
         function selectSong(index) {
-            setSong(index, true);
+            // Clicking a song always starts that song from its configured vocal point.
+            loadSong(index, true);
         }
 
         async function playCurrentSong() {
             try {
+                const song = playlist[currentSong];
+                if (backgroundAudio.readyState < 2) {
+                    await new Promise((resolve, reject) => {
+                        const ok = () => { cleanup(); resolve(); };
+                        const bad = () => { cleanup(); reject(new Error('Audio unavailable')); };
+                        const cleanup = () => {
+                            backgroundAudio.removeEventListener('canplay', ok);
+                            backgroundAudio.removeEventListener('error', bad);
+                        };
+                        backgroundAudio.addEventListener('canplay', ok, { once: true });
+                        backgroundAudio.addEventListener('error', bad, { once: true });
+                    });
+                }
+                seekToStart(song);
                 await backgroundAudio.play();
                 isPlaying = true;
                 document.getElementById('music-icon').innerHTML = '&#10084; MUSIC ON';
@@ -1242,18 +1319,29 @@
             } catch (err) {
                 isPlaying = false;
                 updateSoundtrackUI();
-                console.warn('Music could not start. Check that the MP3 filename exactly matches the GitHub file.', err);
+                console.warn('Music could not start.', err);
             }
         }
 
         function startOpeningSong() {
             if (openingSongFinished) return;
             openingSongFinished = true;
-            backgroundAudio.loop = false;
+            ++audioRequestId;
+            backgroundAudio.pause();
             backgroundAudio.src = encodeFilePath(openingSongFile);
+            backgroundAudio.currentTime = 0;
+            backgroundAudio.loop = false;
             backgroundAudio.load();
             document.getElementById('soundtrack-panel')?.classList.remove('open');
-            playCurrentSong();
+            backgroundAudio.play().then(() => {
+                isPlaying = true;
+                document.getElementById('music-icon').innerHTML = '&#10084; MUSIC ON';
+                document.getElementById('song-play-btn').innerHTML = '&#10074;&#10074;';
+                document.getElementById('album-art')?.classList.add('playing');
+            }).catch(err => {
+                isPlaying = false;
+                console.warn('Opening song needs a user interaction or the MP3 filename is incorrect.', err);
+            });
         }
 
         function stopMusic() {
@@ -1271,7 +1359,7 @@
         }
 
         backgroundAudio.addEventListener('ended', () => {
-            if (backgroundAudio.src.includes(encodeURI(openingSongFile))) {
+            if (backgroundAudio.src.includes(encodeURIComponent(openingSongFile))) {
                 isPlaying = false;
                 document.getElementById('music-icon').innerHTML = '&#9835; MUSIC OFF';
                 document.getElementById('song-play-btn').innerHTML = '&#9654;';
@@ -1280,15 +1368,31 @@
                 return;
             }
             const next = (currentSong + 1) % playlist.length;
-            setSong(next, true);
+            loadSong(next, true);
         });
 
         backgroundAudio.addEventListener('error', () => {
             isPlaying = false;
             document.getElementById('music-icon').innerHTML = '&#9835; MUSIC OFF';
             document.getElementById('song-play-btn').innerHTML = '&#9654;';
+            document.getElementById('album-art')?.classList.remove('playing');
             updateSoundtrackUI();
             console.warn('Audio file could not be loaded:', backgroundAudio.src);
+        });
+
+        // Keep image paths relative to index.html and show a clear fallback if a photo is missing.
+        document.querySelectorAll('.polaroid-img img').forEach(img => {
+            img.addEventListener('error', () => {
+                img.style.display = 'none';
+                const box = img.parentElement;
+                if (box && !box.querySelector('.image-fallback')) {
+                    const fallback = document.createElement('div');
+                    fallback.className = 'image-fallback';
+                    fallback.innerHTML = '📸<br><small>Keep this photo in the same folder as index.html</small>';
+                    fallback.style.cssText = 'padding:20px;text-align:center;color:#999;font-weight:700;line-height:1.5;';
+                    box.appendChild(fallback);
+                }
+            });
         });
 
         renderPlaylist();
