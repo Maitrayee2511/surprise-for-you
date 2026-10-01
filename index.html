@@ -1024,7 +1024,8 @@
         function setSong(index, autoplay = false) {
             currentSong = index;
             const song = playlist[index];
-            backgroundAudio.src = './' + encodeURIComponent(song.file).replace(/%2F/g, '/');
+            // Files must be in the same GitHub folder as index.html.
+            backgroundAudio.src = './' + song.file.split('/').map(encodeURIComponent).join('/');
             backgroundAudio.load();
             document.getElementById('song-title').textContent = song.title;
             document.getElementById('song-caption').textContent = song.caption;
@@ -1050,14 +1051,16 @@
 
         async function startMusic() {
             try {
+                if (!backgroundAudio.src) setSong(currentSong, false);
+                backgroundAudio.muted = false;
                 await backgroundAudio.play();
                 isPlaying = true;
                 document.getElementById('music-icon').innerHTML = '&#10084; MUSIC ON';
                 document.getElementById('song-play-btn').innerHTML = '&#10074;&#10074;';
                 document.getElementById('album-art')?.classList.add('playing');
             } catch (err) {
-                // Browsers can block autoplay until the visitor interacts with the page.
                 isPlaying = false;
+                console.warn('Music could not start. Make sure the MP3 files are uploaded beside index.html.', err);
             }
         }
 
@@ -1074,10 +1077,15 @@
             else startMusic();
         }
 
-        // Start the selected song after the first normal page interaction.
-        document.addEventListener('click', () => {
+        // Start music from a real user gesture. This avoids browser autoplay blocking.
+        let musicGestureHandled = false;
+        function handleFirstMusicGesture() {
+            if (musicGestureHandled) return;
+            musicGestureHandled = true;
             if (!isPlaying) startMusic();
-        }, { once: true });
+        }
+        document.addEventListener('pointerdown', handleFirstMusicGesture, { once: true });
+        document.addEventListener('keydown', handleFirstMusicGesture, { once: true });
 
         backgroundAudio.addEventListener('ended', () => {
             // Because the audio element loops, this normally never fires.
@@ -1106,6 +1114,34 @@
             12: 'bg-pattern-grid'
         };
 
+        function resetQuiz() {
+            quizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-next').style.display = 'none';
+            document.getElementById('quiz-feedback').textContent = '';
+        }
+
+        function resetPromises() {
+            document.querySelectorAll('.promise-item').forEach(item => item.classList.remove('checked'));
+            const status = document.getElementById('promise-status');
+            if (status) status.style.visibility = 'hidden';
+        }
+
+        function resetReasons() {
+            document.querySelectorAll('.reason-card').forEach(card => card.classList.remove('flipped'));
+            const next = document.getElementById('reasons-next');
+            if (next) next.style.display = 'none';
+        }
+
+        function resetHoldHeart() {
+            clearInterval(holdTimer);
+            holdProgress = 0;
+            document.getElementById('hold-counter').textContent = '0%';
+            document.getElementById('heart-fill-clip').style.clipPath = 'inset(100% 0 0 0)';
+            document.getElementById('hold-text').style.display = 'none';
+            document.getElementById('hold-next').style.display = 'none';
+        }
+
         function updateSlide() {
             document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
             document.getElementById(`slide-${currentSlide}`).classList.add('active');
@@ -1120,17 +1156,14 @@
             const body = document.getElementById('body-bg');
             body.className = bgThemes[currentSlide] || 'bg-pattern-yellow';
 
-            if (currentSlide === 3) {
-                loadQuizQuestion();
-            }
-
-            if (currentSlide === 4) {
-                runCompatibilityCounter();
-            }
-
-            if (currentSlide === 5) {
-                resetTicTacToe();
-            }
+            if (currentSlide === 2) resetThisThat();
+            if (currentSlide === 3) { resetQuiz(); loadQuizQuestion(); }
+            if (currentSlide === 4) runCompatibilityCounter();
+            if (currentSlide === 5) resetTicTacToe();
+            if (currentSlide === 6) resetPromises();
+            if (currentSlide === 7) resetReasons();
+            if (currentSlide === 8 && !isPlaying) startMusic();
+            if (currentSlide === 11) resetHoldHeart();
         }
 
         function nextSlide() {
@@ -1156,6 +1189,15 @@
             updateSlide();
         }
 
+        function resetThisThat() {
+            document.querySelectorAll('#slide-2 .choice-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelectorAll('#slide-2 .choice-hint').forEach(h => {
+                h.textContent = '';
+                h.style.display = 'none';
+            });
+            document.getElementById('this-that-next').style.display = 'none';
+        }
+
         function selectChoice(btn, groupId, hintText) {
             const row = btn.closest('.choice-row');
             row.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
@@ -1165,7 +1207,7 @@
             hint.textContent = hintText;
             hint.style.display = 'block';
 
-            const selectedCount = document.querySelectorAll('.choice-btn.selected').length;
+            const selectedCount = document.querySelectorAll('#slide-2 .choice-btn.selected').length;
             if (selectedCount >= 5) {
                 document.getElementById('this-that-next').style.display = 'inline-block';
             }
@@ -1217,11 +1259,11 @@
                 wrongMsg: "Close! 🥹 Look beyond the obvious — it's the effort, care and thought behind your actions."
             },
             {
-                question: "What is the inside joke that needs absolutely no explanation between us?",
-                options: ["Goal King ⚽", "Gap King 😭❤️", "Captain King 🏆", "Drama King 😂"],
+                question: "Which personal joke between us is instantly going to make me laugh? 👀",
+                options: ["NextLevel Gen 😂", "Gap King 😭❤️"],
                 answer: 1,
                 correctMsg: "GAP KING! 😭😂 If you know, you KNOW.",
-                wrongMsg: "Yellow Card! 🟨 There is only one legendary answer here."
+                wrongMsg: "Close! 😂 You know the jokes, but you missed the legendary one."
             },
             {
                 question: "What caught my attention first when I noticed you?",
@@ -1236,6 +1278,14 @@
                 answer: 3,
                 correctMsg: "CHAMPION! 🏆 It's all of you — your aura, passion, attitude, care and every little thing.",
                 wrongMsg: "Trick question! ❤️ Those are all reasons, but the real answer is ALL of you."
+            }
+,
+            {
+                type: "text",
+                question: "What is something you like about me? 💛",
+                placeholder: "Type your answer here...",
+                correctMsg: "I hope you wrote something from the heart. 🥹❤️",
+                wrongMsg: "There is no wrong answer — I just wanted to know what you love about me. 💛"
             }
         ];
 
@@ -1261,6 +1311,26 @@
             const optionsContainer = document.getElementById('quiz-options');
             optionsContainer.innerHTML = '';
 
+            if (current.type === "text") {
+                const input = document.createElement('textarea');
+                input.id = 'quiz-text-answer';
+                input.placeholder = current.placeholder || 'Type your answer...';
+                input.rows = 3;
+                input.maxLength = 180;
+                input.style.cssText = 'width:100%; resize:none; border:2px solid #eee; border-radius:16px; padding:12px; font-family:Nunito,sans-serif; font-size:15px; color:var(--text-dark); outline:none; margin-top:15px;';
+                input.onfocus = () => input.style.borderColor = 'var(--pink-main)';
+                input.onblur = () => input.style.borderColor = '#eee';
+                optionsContainer.appendChild(input);
+
+                const submit = document.createElement('button');
+                submit.className = 'btn-primary';
+                submit.textContent = 'Send My Answer ❤️';
+                submit.style.marginTop = '10px';
+                submit.onclick = () => handleTextQuizAnswer(input, submit);
+                optionsContainer.appendChild(submit);
+                return;
+            }
+
             current.options.forEach((optText, i) => {
                 const btn = document.createElement('button');
                 btn.className = 'quiz-opt-btn';
@@ -1268,6 +1338,30 @@
                 btn.onclick = () => handleQuizAnswer(i, btn);
                 optionsContainer.appendChild(btn);
             });
+        }
+
+
+        function handleTextQuizAnswer(input, submitBtn) {
+            const answer = input.value.trim();
+            if (!answer) {
+                input.style.borderColor = 'var(--red-wrong)';
+                document.getElementById('quiz-feedback').textContent = 'Come on, tell me what you like about me. 🥹';
+                document.getElementById('quiz-feedback').style.color = 'var(--red-wrong)';
+                input.focus();
+                return;
+            }
+
+            input.disabled = true;
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.7';
+            document.getElementById('quiz-feedback').textContent = 'That answer is staying in my heart. ❤️';
+            document.getElementById('quiz-feedback').style.color = 'var(--green-correct)';
+            quizScore++;
+
+            setTimeout(() => {
+                quizIndex++;
+                loadQuizQuestion();
+            }, 1100);
         }
 
         function handleQuizAnswer(selectedIndex, btnElement) {
