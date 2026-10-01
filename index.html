@@ -736,7 +736,7 @@
                     <span style="font-size: 35px;">&#127775;</span>
                 </div>
                 <p id="reason-text" style="font-weight: 700; color: var(--text-dark);">
-                    "Because your passion on and off the field inspires me."
+                    "Because your passion for the game is something I will always admire."
                 </p>
             </div>
             <button class="btn-primary" onclick="nextReason()">Next Reason &#8594;</button>
@@ -965,32 +965,67 @@
         // EDIT YOUR FAVORITES QUIZ QUESTIONS HERE!
         const quizData = [
             {
-                question: "What is my absolute favorite food?",
-                options: ["Pizza 🍕", "Sushi 🍣", "Pasta 🍝", "Ice Cream 🍦"],
-                answer: 2, // 0 = Pizza, 1 = Sushi, 2 = Pasta, 3 = Ice Cream
-                correctMsg: "GOAL! You know my stomach so well! 🍝❤️",
-                wrongMsg: "Yellow Card! 🟨 Close, but nope!"
+                question: "What food can I almost never say no to?",
+                options: ["Pizza 🍕", "Momos 🥟", "Pasta 🍝", "Fries 🍟"],
+                answer: 1,
+                correctMsg: "GOAL! You really know your girl! 🥟💛",
+                wrongMsg: "Yellow Card! 🟨 You need to know my cravings better!"
             },
             {
-                question: "What's my ultimate favorite color?",
-                options: ["Baby Pink 🌸", "Sky Blue 🩵", "Lavender 🪻", "Emerald Green 💚"],
-                answer: 0,
-                correctMsg: "Top corner strike! Pink always! 🌸",
-                wrongMsg: "Offside! Try to remember my aesthetic! 😉"
-            },
-            {
-                question: "What is my ideal ideal date with you?",
-                options: ["Fancy dinner date 🍷", "Cozy movie night & takeaway 🎬", "Cheering for you at your match ⚽", "Late night drive 🚗"],
+                question: "Which colour feels the most like me?",
+                options: ["Pink 🌸", "Blue 🩵", "Yellow 💛", "Purple 💜"],
                 answer: 2,
-                correctMsg: "Hat-trick! Being your #1 fan in the stands! ⚽",
-                wrongMsg: "VAR review: Sounds nice, but cheering for you wins!"
+                correctMsg: "Top corner! 💛 You know my colour!",
+                wrongMsg: "Offside! 🟨 Think sunshine!"
             },
             {
-                question: "What is my number one favorite thing about you?",
-                options: ["Your smile 😊", "How passionate you are ⚽", "Your cozy hugs 🫂", "All of the above! ❤️"],
+                question: "What can instantly make me happy?",
+                options: ["Shopping 🛍️", "A surprise gift 🎁", "Bappa and you ❤️", "Going out ✨"],
+                answer: 2,
+                correctMsg: "HAT-TRICK! ❤️ You know exactly where my happiness lives!",
+                wrongMsg: "VAR says... close, but you forgot two very important things! 😭❤️"
+            },
+            {
+                question: "Where do I dream of going with you?",
+                options: ["Paris 🇫🇷", "Spain 🇪🇸", "Switzerland 🇨🇭", "Bali 🌴"],
+                answer: 1,
+                correctMsg: "GOOOAL! 🇪🇸 One day, Spain together! ✈️❤️",
+                wrongMsg: "Wrong destination! 🗺️ Better check our dream-trip list!"
+            },
+            {
+                question: "Which name from you makes me the softest?",
+                options: ["Princess 👑", "Bala / Sweetiee 🥹❤️", "Baby 🧸", "Sunshine ☀️"],
+                answer: 1,
+                correctMsg: "That's my weakness! 🥹❤️ Bala / Sweetiee wins!",
+                wrongMsg: "Nope! You know the name that makes me melt! 😉"
+            },
+            {
+                question: "What about you melts my heart the most?",
+                options: ["Your smile 😊", "Your efforts, care and thoughtful gestures ❤️", "Your jokes 😂", "Your style 😎"],
+                answer: 1,
+                correctMsg: "GOAL! It's the little things you do that mean everything. ❤️",
+                wrongMsg: "Close! It's the effort and care behind everything you do. 🥹"
+            },
+            {
+                question: "What is our legendary inside joke? 👀",
+                options: ["Goal King ⚽", "Gap King 😭❤️", "Match King 🏆", "Drama King 😂"],
+                answer: 1,
+                correctMsg: "GAP KING! 😭😂 If you know, you KNOW!",
+                wrongMsg: "Yellow Card! 🟨 How could you forget GAP KING?! 😭"
+            },
+            {
+                question: "What was the FIRST thing I noticed about you?",
+                options: ["Your smile 😊", "Your voice 🎙️", "Your tattoos 👀❤️", "Your hair 😌"],
+                answer: 2,
+                correctMsg: "FIRST IMPRESSION GOAL! 👀 Your tattoos caught my attention! ❤️",
+                wrongMsg: "Replay! 🔄 Think about the very first thing that caught my eye!"
+            },
+            {
+                question: "What do I love about you more than I can put into words?",
+                options: ["Your aura ✨", "Your passion for the game ⚽", "Your attitude and the way you care for me ❤️", "All of you. Always. 🥹❤️"],
                 answer: 3,
-                correctMsg: "CHAMPION! You got 100%! All of you! ❤️🏆",
-                wrongMsg: "Trick question... it's ALL of the above!"
+                correctMsg: "CHAMPION! 🏆 You got it — it's all of you. ❤️",
+                wrongMsg: "Trick question... it's ALL of you. Always. ❤️"
             }
         ];
 
@@ -1124,11 +1159,17 @@
         }
 
         const reasons = [
-            '"Because your dedication on and off the pitch inspires me."',
-            '"Because you always make me smile, even after a tough match."',
-            '"Because I feel safest when I\'m right by your side."',
-            '"Because you listen to all my stories with so much patience."',
-            '"Because you are my favorite athlete and favorite human."'
+            '"Because I love your aura — there is just something about you that draws me in every single time."',
+            '"Because your passion for the game is one of the things I admire most about you. I love seeing you chase what you love."',
+            '"Because I love your attitude — the way you carry yourself, keep going and give your best."',
+            '"Because you make me feel safe. I love knowing that you look out for me and are always there for me."',
+            '"Because even when I am not feeling well, you take care of me. Especially on the days when I have a migraine, your care means more than you know."',
+            '"Because your efforts and thoughtful little gestures make me feel loved in ways you probably do not even realise."',
+            '"Because I love watching you play, seeing your passion and knowing how much the game means to you. I will always be proud to cheer for you."',
+            '"Because with you, even the ordinary moments become memories I want to keep forever."',
+            '"Because distance may give us miles between us, but it will never change what we are building together. We will conquer this LDR, one day at a time."',
+            '"Because no matter where life takes us, I want to keep choosing you, supporting your dreams and being your biggest fan."',
+            '"And most of all, because you are you — my Bala, my Sweetiee, my Gap King, and my favourite person. ❤️"'
         ];
         let reasonIdx = 0;
 
